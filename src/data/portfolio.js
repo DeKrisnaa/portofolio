@@ -188,6 +188,37 @@ export const education = [
   }
 ]
 
+export const organizations = [
+  {
+    name: 'Himpunan Mahasiswa Informatika (HMI)',
+    org: 'Primakara University',
+    role: 'Anggota',
+    period: '2024 — Sekarang',
+    type: 'Organisasi Kampus',
+    glyph: '◈',
+    accent: 'var(--violet)',
+    activities: [
+      'Ikut rapat rutin kepengurusan',
+      'Meny organising kegiatan mahasiswa',
+      'Menyetusun program kerja bidang'
+    ]
+  },
+  {
+    name: 'De_Krisna Channel',
+    org: 'Self-managed',
+    role: 'Kreator & Editor',
+    period: '2022 — Sekarang',
+    type: 'Konten Kreatif',
+    glyph: '◉',
+    accent: 'var(--pink)',
+    activities: [
+      'Produksi konten musik',
+      'Editing video & desain thumbnail',
+      'Kelola akun media sosial'
+    ]
+  }
+]
+
 export const values = [
   {
     title: 'Kode yang enak dibaca',

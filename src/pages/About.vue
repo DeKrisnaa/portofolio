@@ -2,7 +2,7 @@
 import { RouterLink } from 'vue-router'
 import SectionHeading from '../components/SectionHeading.vue'
 import Marquee from '../components/Marquee.vue'
-import { profile, timeline, education, values, marqueeItems } from '../data/portfolio'
+import { profile, timeline, education, organizations, values, marqueeItems } from '../data/portfolio'
 </script>
 
 <template>
@@ -92,7 +92,8 @@ import { profile, timeline, education, values, marqueeItems } from '../data/port
     <section class="section container">
       <SectionHeading
         eyebrow="Pendidikan"
-        title="Latar belakang akademik & sertifikasi."
+        title="Riwayat pendidikan saya."
+        description="Formal pendidikan yang saya tempuh sampai hari ini, dari sekolah menengah sampai perguruan tinggi."
       />
       <div class="education">
         <article
@@ -106,6 +107,40 @@ import { profile, timeline, education, values, marqueeItems } from '../data/port
           <h3 class="h3">{{ item.degree }}</h3>
           <p class="edu__school">{{ item.school }}</p>
           <p class="edu__note">{{ item.note }}</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section container">
+      <SectionHeading
+        eyebrow="Organisasi"
+        title="Tempat saya berkarya di luar kelas."
+        description="Aktivitas yang membentuk cara saya bekerja — dari kepengurusan kampus sampai_channel kreatif."
+      />
+      <div class="orgs">
+        <article
+          v-for="(item, index) in organizations"
+          :key="item.name"
+          class="org glass glass--hover"
+          :style="{ '--accent': item.accent }"
+          v-spotlight
+          v-reveal="index * 90"
+        >
+          <header class="org__head">
+            <span class="org__glyph">{{ item.glyph }}</span>
+            <div class="org__id">
+              <h3 class="h3">{{ item.name }}</h3>
+              <p class="org__org">{{ item.org }}</p>
+            </div>
+            <span class="org__period mono">{{ item.period }}</span>
+          </header>
+          <div class="org__meta">
+            <span class="org__role">{{ item.role }}</span>
+            <span class="org__type mono">{{ item.type }}</span>
+          </div>
+          <ul class="org__list">
+            <li v-for="activity in item.activities" :key="activity">{{ activity }}</li>
+          </ul>
         </article>
       </div>
     </section>
@@ -322,6 +357,120 @@ import { profile, timeline, education, values, marqueeItems } from '../data/port
   line-height: 1.65;
 }
 
+/* ORGANIZATIONS */
+.orgs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.org {
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+  padding: 1.85rem;
+}
+
+.org__head {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.9rem;
+}
+
+.org__glyph {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 13px;
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
+  color: var(--accent);
+  font-size: 1.1rem;
+  transition: transform 0.5s var(--spring);
+}
+
+.org:hover .org__glyph {
+  transform: scale(1.1) rotate(-6deg);
+}
+
+.org__id {
+  min-width: 0;
+}
+
+.org__org {
+  margin-top: 0.25rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.org__period {
+  margin-left: auto;
+  flex-shrink: 0;
+  padding-top: 0.3rem;
+  color: var(--dim);
+  font-size: 0.68rem;
+}
+
+.org__meta {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  flex-wrap: wrap;
+  padding-bottom: 1.05rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.org__role {
+  padding: 0.28rem 0.7rem;
+  border-radius: 99px;
+  background: var(--surface-hover);
+  color: var(--text);
+  font-size: 0.76rem;
+}
+
+.org__type {
+  color: var(--accent);
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.org__list {
+  display: grid;
+  gap: 0.55rem;
+  margin-top: auto;
+}
+
+.org__list li {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+
+.org__list li::before {
+  content: "";
+  flex-shrink: 0;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+@media (max-width: 980px) {
+  .org__head {
+    flex-wrap: wrap;
+  }
+
+  .org__period {
+    margin-left: 0;
+    width: 100%;
+    padding-top: 0;
+  }
+}
+
 @media (max-width: 980px) {
   .intro {
     grid-template-columns: 1fr;
@@ -337,7 +486,6 @@ import { profile, timeline, education, values, marqueeItems } from '../data/port
   .education {
     grid-template-columns: 1fr;
   }
-
   .timeline {
     padding-left: 0;
   }
