@@ -70,6 +70,7 @@ defineProps({
   flex-direction: column;
   overflow: hidden;
   height: 100%;
+  min-width: 0;
 }
 
 .pcard__media {
@@ -101,8 +102,10 @@ defineProps({
   transition: transform 0.6s var(--spring);
 }
 
-.pcard:hover .pcard__glyph {
-  transform: scale(1.14) rotate(-6deg);
+@media (hover: hover) {
+  .pcard:hover .pcard__glyph {
+    transform: scale(1.14) rotate(-6deg);
+  }
 }
 
 .pcard__year {
@@ -111,7 +114,7 @@ defineProps({
   right: 14px;
   z-index: 1;
   color: rgba(8, 8, 11, 0.7);
-  font-size: 0.7rem;
+  font-size: 0.72rem;
   letter-spacing: 0.08em;
 }
 
@@ -130,24 +133,39 @@ defineProps({
   gap: 1rem;
 }
 
+.pcard__head .h3 {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
 .pcard__arrow {
   flex-shrink: 0;
   display: grid;
   place-items: center;
-  width: 34px;
-  height: 34px;
+  width: var(--tap);
+  height: var(--tap);
+  margin: -0.25rem -0.25rem -0.25rem 0;
   border: 1px solid var(--border);
   border-radius: 50%;
   color: var(--muted);
   text-decoration: none;
-  transition: all 0.4s var(--ease);
+  transition: color 0.4s var(--ease), background 0.4s var(--ease), border-color 0.4s,
+    transform 0.4s var(--ease);
 }
 
-.pcard:hover .pcard__arrow {
-  color: #08080b;
-  background: var(--cyan);
-  border-color: transparent;
-  transform: translate(3px, -3px) rotate(8deg);
+@media (hover: hover) {
+  .pcard:hover .pcard__arrow {
+    color: #08080b;
+    background: var(--cyan);
+    border-color: transparent;
+    transform: translate(3px, -3px) rotate(8deg);
+  }
+
+  .pcard__arrow:hover {
+    color: #08080b;
+    background: var(--cyan);
+    border-color: transparent;
+  }
 }
 
 .pcard__summary {
@@ -162,6 +180,7 @@ defineProps({
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
+  flex-wrap: wrap;
   padding-top: 0.9rem;
   border-top: 1px solid var(--border);
 }
@@ -188,7 +207,7 @@ defineProps({
   left: 14px;
   z-index: 1;
   color: rgba(8, 8, 11, 0.7);
-  font-size: 0.7rem;
+  font-size: 0.72rem;
   letter-spacing: 0.08em;
 }
 
@@ -199,19 +218,24 @@ defineProps({
 }
 
 .pcard__link {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap);
   padding: 0.34rem 0.72rem;
   border: 1px solid var(--border);
   border-radius: 99px;
   font-size: 0.72rem;
   color: var(--muted);
   text-decoration: none;
-  transition: all 0.3s var(--ease);
+  transition: color 0.3s var(--ease), border-color 0.3s, background 0.3s;
 }
 
-.pcard__link:hover {
-  color: var(--text);
-  border-color: rgba(255, 255, 255, 0.24);
-  background: rgba(255, 255, 255, 0.05);
+@media (hover: hover) {
+  .pcard__link:hover {
+    color: var(--text);
+    border-color: rgba(255, 255, 255, 0.24);
+    background: rgba(255, 255, 255, 0.05);
+  }
 }
 
 .pcard__link--live {
@@ -219,9 +243,11 @@ defineProps({
   border-color: color-mix(in srgb, var(--cyan) 40%, transparent);
 }
 
-.pcard__link--live:hover {
-  color: #08080b;
-  background: var(--cyan);
-  border-color: transparent;
+@media (hover: hover) {
+  .pcard__link--live:hover {
+    color: #08080b;
+    background: var(--cyan);
+    border-color: transparent;
+  }
 }
 </style>

@@ -63,12 +63,14 @@ defineProps({
   transition: color 0.3s;
 }
 
-.marquee__item:hover {
-  color: var(--text);
+@media (hover: hover) {
+  .marquee__item:hover {
+    color: var(--text);
+  }
 }
 
 .marquee__sep {
-  font-size: 0.6em;
+  font-size: 0.7em;
   color: var(--violet);
 }
 </style>

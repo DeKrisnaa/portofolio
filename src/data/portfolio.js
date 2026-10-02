@@ -50,59 +50,6 @@ export const marqueeItems = [
   'Figma'
 ]
 
-export const services = [
-  {
-    span: 'wide',
-    eyebrow: 'Filosofi',
-    glyph: '◈',
-    title: 'Selesaikan masalahnya dulu, baru rapikan kodenya.',
-    body: 'Saya selalu mulai dari memahami masalah dan penggunanya, baru memilih teknologi. Versi pertama dibuat sesederhana mungkin supaya cepat diuji dan mudah diperbaiki.',
-    points: ['Pahami kebutuhan dulu', 'Bangun versi sederhana', 'Perbaiki bertahap']
-  },
-  {
-    eyebrow: 'Frontend',
-    glyph: '◐',
-    title: 'Antarmuka yang bersih dan ringan',
-    body: 'Halaman dibangun dengan komponen yang rapi memakai Next.js, React, dan Tailwind CSS, dengan perhatian pada tampilan mobile dan keterbacaan.',
-    points: ['Next.js & React', 'TypeScript', 'Tailwind CSS']
-  },
-  {
-    eyebrow: 'Backend',
-    glyph: '◑',
-    title: 'Alur data yang jelas',
-    body: 'Menghubungkan aplikasi ke API dan database, termasuk autentikasi pengguna, dengan struktur yang mudah dilacak saat ada error.',
-    points: ['Next.js API Routes', 'REST API', 'Autentikasi']
-  },
-  {
-    eyebrow: 'Deploy',
-    glyph: '◆',
-    title: 'Rilis dan versi yang terkelola',
-    body: 'Setiap proyek saya kelola dengan Git dan GitHub, lalu dideploy ke Vercel agar bisa diakses publik dan mudah diperbarui.',
-    points: ['Git & GitHub', 'Deploy Vercel', 'Domain & hosting']
-  }
-]
-
-export const skillGroups = [
-  {
-    name: 'Web Frontend',
-    glyph: '◐',
-    accent: 'var(--violet)',
-    items: ['HTML & CSS', 'JavaScript', 'TypeScript', 'Next.js', 'React', 'Tailwind CSS', 'Responsive Design']
-  },
-  {
-    name: 'Backend & Deploy',
-    glyph: '◑',
-    accent: 'var(--cyan)',
-    items: ['Node.js', 'Next.js API Routes', 'REST API', 'Autentikasi', 'Git & GitHub', 'Vercel']
-  },
-  {
-    name: 'Kreatif & Tools',
-    glyph: '◆',
-    accent: 'var(--pink)',
-    items: ['Figma', 'Canva', 'CapCut', 'Editing video', 'Manajemen konten', 'Linux']
-  }
-]
-
 export const projects = [
   {
     id: 1,
@@ -150,29 +97,6 @@ export const projects = [
 
 export const projectFilters = ['Semua', 'Web App', 'Portofolio']
 
-export const timeline = [
-  {
-    year: '2021',
-    title: 'SMA Negeri 1 Pekutatan — Jurusan MIPA',
-    body: 'Menempuh pendidikan menengah atas dengan peminatan Matematika dan IPA. Rasa penasaran soal teknologi dan media digital mulai tumbuh dari sini.'
-  },
-  {
-    year: '2024',
-    title: 'Masuk Primakara University, Jurusan Informatika',
-    body: 'Mulai belajar dasar-dasar pemrograman dan logika komputer secara formal, sekaligus aktif membuat konten di De_Krisna Channel.'
-  },
-  {
-    year: '2025',
-    title: 'Belajar web development secara serius',
-    body: 'Mendalami HTML, CSS, dan JavaScript, lalu berlanjut ke Next.js dan Tailwind CSS. Membangun website portofolio pertama.'
-  },
-  {
-    year: '2026',
-    title: 'Membangun SmartCash',
-    body: 'Mengerjakan aplikasi keuangan berbasis web dengan Next.js dan TypeScript — dari halaman autentikasi sampai proses deploy ke Vercel.'
-  }
-]
-
 export const education = [
   {
     school: 'Primakara University',
@@ -216,21 +140,6 @@ export const organizations = [
       'Editing video & desain thumbnail',
       'Kelola akun media sosial'
     ]
-  }
-]
-
-export const values = [
-  {
-    title: 'Kode yang enak dibaca',
-    body: 'Nama variabel yang jelas, struktur folder yang rapi, dan komentar hanya untuk hal yang benar-benar tidak obvious.'
-  },
-  {
-    title: 'Detail yang terasa',
-    body: 'Jarak, kontras teks, dan tampilan di layar kecil adalah hal kecil yang membuat produk terasa selesai, bukan sekadar latihan.'
-  },
-  {
-    title: 'Terus belajar',
-    body: 'Setiap teknologi baru saya coba di project kecil lebih dulu, baru dipakai di project yang lebih serius.'
   }
 ]
 

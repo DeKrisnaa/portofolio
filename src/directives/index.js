@@ -48,6 +48,9 @@ const spotlightHandlers = new WeakMap()
 
 export const spotlight = {
   mounted(el) {
+    // touch devices fire pointermove while scrolling, which only burns frames
+    if (window.matchMedia('(hover: none)').matches) return
+
     el.classList.add('spotlight')
 
     const onMove = (event) => {

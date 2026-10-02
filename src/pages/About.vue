@@ -2,7 +2,7 @@
 import { RouterLink } from 'vue-router'
 import SectionHeading from '../components/SectionHeading.vue'
 import Marquee from '../components/Marquee.vue'
-import { profile, timeline, education, organizations, values, marqueeItems } from '../data/portfolio'
+import { profile, education, organizations, marqueeItems } from '../data/portfolio'
 </script>
 
 <template>
@@ -44,50 +44,6 @@ import { profile, timeline, education, organizations, values, marqueeItems } fro
     </section>
 
     <Marquee :items="marqueeItems" reverse />
-
-    <section class="section container">
-      <SectionHeading
-        eyebrow="Cara kerja"
-        title="Tiga prinsip yang saya pegang."
-        description="Bukan slogan, tapi hal-hal yang benar-benar saya usahakan di setiap project."
-      />
-      <div class="values">
-        <article
-          v-for="(value, index) in values"
-          :key="value.title"
-          class="value glass glass--hover"
-          v-spotlight
-          v-reveal="index * 90"
-        >
-          <span class="value__index mono">0{{ index + 1 }}</span>
-          <h3 class="h3">{{ value.title }}</h3>
-          <p>{{ value.body }}</p>
-        </article>
-      </div>
-    </section>
-
-    <section class="section container">
-      <SectionHeading
-        eyebrow="Perjalanan"
-        title="Dari HTML pertama sampai full-stack."
-      />
-      <ol class="timeline">
-        <li
-          v-for="(item, index) in timeline"
-          :key="item.year"
-          class="timeline__item"
-          v-reveal="index * 90"
-        >
-          <div class="timeline__marker">
-            <span class="mono">{{ item.year }}</span>
-          </div>
-          <div class="timeline__card glass glass--hover">
-            <h3 class="h3">{{ item.title }}</h3>
-            <p>{{ item.body }}</p>
-          </div>
-        </li>
-      </ol>
-    </section>
 
     <section class="section container">
       <SectionHeading
@@ -157,6 +113,11 @@ import { profile, timeline, education, organizations, values, marqueeItems } fro
   padding-block: clamp(3rem, 8vw, 6rem) clamp(3rem, 6vw, 5rem);
 }
 
+.intro__media,
+.intro__copy {
+  min-width: 0;
+}
+
 .intro__media {
   position: relative;
   display: grid;
@@ -182,8 +143,10 @@ import { profile, timeline, education, organizations, values, marqueeItems } fro
   transition: transform 1.1s var(--ease);
 }
 
-.portrait:hover .portrait__photo {
-  transform: scale(1.05);
+@media (hover: hover) {
+  .portrait:hover .portrait__photo {
+    transform: scale(1.05);
+  }
 }
 
 .portrait__glow {
@@ -242,88 +205,6 @@ import { profile, timeline, education, organizations, values, marqueeItems } fro
   margin-top: 0.5rem;
 }
 
-/* VALUES */
-.values {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-}
-
-.value {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  padding: 1.85rem;
-}
-
-.value__index {
-  font-size: 0.78rem;
-  color: var(--violet);
-}
-
-.value p {
-  color: var(--muted);
-  font-size: 0.93rem;
-  line-height: 1.7;
-}
-
-/* TIMELINE */
-.timeline {
-  position: relative;
-  display: grid;
-  gap: 1.25rem;
-  padding-left: 2.5rem;
-}
-
-.timeline::before {
-  content: "";
-  position: absolute;
-  top: 8px;
-  bottom: 8px;
-  left: 77px;
-  width: 1px;
-  background: linear-gradient(180deg, transparent, var(--violet), var(--cyan), transparent);
-}
-
-.timeline__item {
-  display: grid;
-  grid-template-columns: 110px 1fr;
-  align-items: start;
-  gap: 1.5rem;
-}
-
-.timeline__marker {
-  position: relative;
-  padding-top: 1.35rem;
-  text-align: right;
-  padding-right: 1.75rem;
-  color: var(--muted);
-  font-size: 0.78rem;
-}
-
-.timeline__marker::after {
-  content: "";
-  position: absolute;
-  top: 1.65rem;
-  right: -0.3rem;
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  background: var(--cyan);
-  box-shadow: 0 0 0 4px rgba(34, 211, 238, 0.14), 0 0 18px rgba(34, 211, 238, 0.6);
-}
-
-.timeline__card {
-  padding: 1.5rem 1.75rem;
-}
-
-.timeline__card p {
-  margin-top: 0.5rem;
-  color: var(--muted);
-  font-size: 0.93rem;
-  line-height: 1.7;
-}
-
 /* EDUCATION */
 .education {
   display: grid;
@@ -336,6 +217,7 @@ import { profile, timeline, education, organizations, values, marqueeItems } fro
   flex-direction: column;
   gap: 0.5rem;
   padding: 1.85rem;
+  min-width: 0;
 }
 
 .edu__period {
@@ -358,9 +240,10 @@ import { profile, timeline, education, organizations, values, marqueeItems } fro
 }
 
 /* ORGANIZATIONS */
+/* min() keeps the track from outgrowing the gutter on 320px screens */
 .orgs {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
   gap: 20px;
 }
 
@@ -369,6 +252,7 @@ import { profile, timeline, education, organizations, values, marqueeItems } fro
   flex-direction: column;
   gap: 1.15rem;
   padding: 1.85rem;
+  min-width: 0;
 }
 
 .org__head {
@@ -390,8 +274,10 @@ import { profile, timeline, education, organizations, values, marqueeItems } fro
   transition: transform 0.5s var(--spring);
 }
 
-.org:hover .org__glyph {
-  transform: scale(1.1) rotate(-6deg);
+@media (hover: hover) {
+  .org:hover .org__glyph {
+    transform: scale(1.1) rotate(-6deg);
+  }
 }
 
 .org__id {
@@ -409,7 +295,7 @@ import { profile, timeline, education, organizations, values, marqueeItems } fro
   flex-shrink: 0;
   padding-top: 0.3rem;
   color: var(--dim);
-  font-size: 0.68rem;
+  font-size: 0.72rem;
 }
 
 .org__meta {
@@ -431,7 +317,7 @@ import { profile, timeline, education, organizations, values, marqueeItems } fro
 
 .org__type {
   color: var(--accent);
-  font-size: 0.68rem;
+  font-size: 0.72rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
@@ -460,6 +346,20 @@ import { profile, timeline, education, organizations, values, marqueeItems } fro
 }
 
 @media (max-width: 980px) {
+  .intro {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    text-align: left;
+  }
+
+  .intro__copy {
+    align-items: flex-start;
+  }
+
+  .education {
+    grid-template-columns: 1fr;
+  }
+
   .org__head {
     flex-wrap: wrap;
   }
@@ -471,49 +371,27 @@ import { profile, timeline, education, organizations, values, marqueeItems } fro
   }
 }
 
-@media (max-width: 980px) {
-  .intro {
-    grid-template-columns: 1fr;
-    justify-items: center;
-    text-align: left;
+@media (max-width: 640px) {
+  .edu,
+  .org {
+    padding: 1.35rem;
   }
 
-  .intro__copy {
-    align-items: flex-start;
+  /* the photo is the first thing on the page, so let it use the full width */
+  .portrait {
+    width: min(340px, 100%);
+  }
+}
+
+@media (max-width: 380px) {
+  .intro__actions {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
   }
 
-  .values,
-  .education {
-    grid-template-columns: 1fr;
-  }
-  .timeline {
-    padding-left: 0;
-  }
-
-  .timeline::before {
-    left: 5px;
-  }
-
-  .timeline__item {
-    grid-template-columns: 1fr;
-    gap: 0.75rem;
-    padding-left: 1.75rem;
-  }
-
-  .timeline__marker {
-    padding-top: 0;
-    padding-right: 0;
-    text-align: left;
-  }
-
-  .timeline__marker::after {
-    top: 0.5rem;
-    left: -1.75rem;
-    right: auto;
-  }
-
-  .values {
-    grid-template-columns: 1fr;
+  .intro__actions .btn {
+    justify-content: center;
   }
 }
 </style>

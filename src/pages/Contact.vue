@@ -112,7 +112,15 @@ const reset = () => {
             <div class="form__row">
               <label class="field" :class="{ 'is-invalid': errors.name }">
                 <span class="field__label">Nama</span>
-                <input v-model="form.name" type="text" placeholder="Nama lengkap" @input="errors.name = ''" />
+                <input
+                  v-model="form.name"
+                  type="text"
+                  name="name"
+                  autocomplete="name"
+                  autocapitalize="words"
+                  placeholder="Nama lengkap"
+                  @input="errors.name = ''"
+                />
                 <span v-if="errors.name" class="field__error">{{ errors.name }}</span>
               </label>
 
@@ -121,6 +129,11 @@ const reset = () => {
                 <input
                   v-model="form.email"
                   type="email"
+                  name="email"
+                  autocomplete="email"
+                  autocapitalize="none"
+                  autocorrect="off"
+                  spellcheck="false"
                   placeholder="nama@email.com"
                   @input="errors.email = ''"
                 />
@@ -133,6 +146,8 @@ const reset = () => {
               <input
                 v-model="form.subject"
                 type="text"
+                name="subject"
+                autocomplete="off"
                 placeholder="Contoh: Website untuk UMKM"
                 @input="errors.subject = ''"
               />
@@ -143,7 +158,9 @@ const reset = () => {
               <span class="field__label">Pesan</span>
               <textarea
                 v-model="form.message"
+                name="message"
                 rows="6"
+                autocomplete="off"
                 placeholder="Ceritakan kebutuhan, target waktu, dan kisaran budget (jika ada)."
                 @input="errors.message = ''"
               ></textarea>
@@ -195,6 +212,11 @@ const reset = () => {
   padding-bottom: 2rem;
 }
 
+.contact__side,
+.contact__form-wrap {
+  min-width: 0;
+}
+
 .contact__side {
   display: grid;
   gap: 16px;
@@ -210,6 +232,7 @@ const reset = () => {
   align-items: center;
   gap: 1rem;
   padding: 1.1rem 1.25rem;
+  min-width: 0;
 }
 
 .info__glyph {
@@ -228,19 +251,25 @@ const reset = () => {
 .info__label {
   display: block;
   color: var(--dim);
-  font-size: 0.68rem;
+  font-size: 0.72rem;
   text-transform: uppercase;
   letter-spacing: 0.12em;
 }
 
 .info__value {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap);
   color: var(--text);
   font-size: 0.95rem;
+  overflow-wrap: anywhere;
   transition: color 0.3s;
 }
 
-.info__value:hover {
-  color: var(--cyan);
+@media (hover: hover) {
+  .info__value:hover {
+    color: var(--cyan);
+  }
 }
 
 .side-card {
@@ -265,20 +294,23 @@ const reset = () => {
 .socials__link {
   justify-content: space-between;
   width: 100%;
+  min-height: var(--tap);
   padding: 0.6rem 0.9rem;
   color: var(--text);
-  transition: all 0.3s var(--ease);
+  transition: border-color 0.3s, background 0.3s, transform 0.3s var(--ease);
 }
 
-.socials__link:hover {
-  border-color: var(--border-strong);
-  background: rgba(255, 255, 255, 0.06);
-  transform: translateX(4px);
+@media (hover: hover) {
+  .socials__link:hover {
+    border-color: var(--border-strong);
+    background: rgba(255, 255, 255, 0.06);
+    transform: translateX(4px);
+  }
 }
 
 .socials__handle {
   color: var(--dim);
-  font-size: 0.68rem;
+  font-size: 0.72rem;
 }
 
 /* FORM */
@@ -302,6 +334,7 @@ const reset = () => {
   display: grid;
   gap: 0.45rem;
   position: relative;
+  min-width: 0;
 }
 
 .field__label {
@@ -426,6 +459,16 @@ const reset = () => {
 
   .form__submit {
     justify-self: stretch;
+  }
+}
+
+/* iOS Safari zooms the viewport in on focus unless the field is 16px or bigger,
+   which then leaves the page stuck at that zoom level. Touch devices always need it. */
+@media (hover: none), (max-width: 900px) {
+  .field input,
+  .field textarea {
+    font-size: 16px;
+    padding: 0.8rem 0.9rem;
   }
 }
 </style>

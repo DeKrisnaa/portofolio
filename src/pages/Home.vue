@@ -4,7 +4,7 @@ import SectionHeading from '../components/SectionHeading.vue'
 import ProjectCard from '../components/ProjectCard.vue'
 import Marquee from '../components/Marquee.vue'
 import StatCounter from '../components/StatCounter.vue'
-import { profile, services, skillGroups, projects, marqueeItems, stats } from '../data/portfolio'
+import { profile, projects, marqueeItems, stats } from '../data/portfolio'
 import { techStack } from '../data/techStack'
 
 const featured = projects.slice(0, 3)
@@ -101,63 +101,6 @@ const featured = projects.slice(0, 3)
 
     <Marquee :items="marqueeItems" />
 
-    <!-- SERVICES BENTO -->
-    <section class="section container">
-      <SectionHeading
-        eyebrow="Yang saya kerjakan"
-        title="Dari ide sampai tayang, saya kerjakan end-to-end."
-        description="Empat area utama yang paling sering saya sentuh saat membangun sebuah produk."
-      />
-
-      <div class="bento">
-        <article
-          v-for="(service, index) in services"
-          :key="service.title"
-          class="bento__card glass glass--hover"
-          :class="{ 'bento__card--wide': service.span === 'wide' }"
-          v-spotlight
-          v-reveal="index * 80"
-        >
-          <span class="bento__glyph">{{ service.glyph }}</span>
-          <span class="eyebrow">{{ service.eyebrow }}</span>
-          <h3 class="h3 bento__title">{{ service.title }}</h3>
-          <p class="bento__body">{{ service.body }}</p>
-          <ul class="bento__points">
-            <li v-for="point in service.points" :key="point">{{ point }}</li>
-          </ul>
-        </article>
-      </div>
-    </section>
-
-    <!-- SKILLS -->
-    <section class="section container skills">
-      <SectionHeading
-        eyebrow="Tech stack"
-        title="Alat yang saya pakai setiap hari."
-        description="Bukan daftar panjang tanpa arah, tapi tool yang benar-benar saya gunakan untuk menyelesaikan pekerjaan."
-      />
-
-      <div class="skills__grid">
-        <div
-          v-for="(group, index) in skillGroups"
-          :key="group.name"
-          class="skill glass glass--hover"
-          :style="{ '--accent': group.accent }"
-          v-spotlight
-          v-reveal="index * 90"
-        >
-          <header class="skill__head">
-            <span class="skill__glyph">{{ group.glyph }}</span>
-            <h3 class="h3">{{ group.name }}</h3>
-            <span class="mono skill__count">{{ group.items.length }} tools</span>
-          </header>
-          <ul class="skill__list">
-            <li v-for="item in group.items" :key="item">{{ item }}</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
     <!-- FEATURED PROJECTS -->
     <section class="section container">
       <SectionHeading
@@ -192,6 +135,14 @@ const featured = projects.slice(0, 3)
   gap: clamp(2rem, 5vw, 4.5rem);
   align-items: center;
   padding-block: clamp(3rem, 8vw, 6.5rem) clamp(3rem, 6vw, 5rem);
+}
+
+/* grid children default to min-width:auto, which lets the <pre> below
+   push the whole page sideways on narrow screens */
+.hero__copy,
+.hero__visual,
+.hero__stack {
+  min-width: 0;
 }
 
 .hero__copy {
@@ -295,6 +246,7 @@ const featured = projects.slice(0, 3)
   font-size: 0.82rem;
   line-height: 1.85;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   color: #d6d6e0;
 }
 
@@ -379,7 +331,7 @@ const featured = projects.slice(0, 3)
 .profile-card__meta em {
   font-style: normal;
   font-family: var(--font-mono);
-  font-size: 0.6rem;
+  font-size: 0.72rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--dim);
@@ -410,7 +362,7 @@ const featured = projects.slice(0, 3)
 
 .stackgrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(96px, 100%), 1fr));
   gap: 12px;
 }
 
@@ -423,6 +375,7 @@ const featured = projects.slice(0, 3)
   padding: 1.05rem 0.5rem;
   border-radius: var(--radius);
   overflow: hidden;
+  min-width: 0;
   transition: transform 0.45s var(--ease), border-color 0.4s, background 0.4s, box-shadow 0.45s;
 }
 
@@ -436,15 +389,17 @@ const featured = projects.slice(0, 3)
   background: radial-gradient(70% 65% at 50% 0%, color-mix(in srgb, var(--brand) 24%, transparent), transparent 72%);
 }
 
-.tech:hover {
-  transform: translateY(-7px);
-  border-color: color-mix(in srgb, var(--brand) 45%, transparent);
-  background: var(--surface-hover);
-  box-shadow: 0 20px 44px -24px var(--brand);
-}
+@media (hover: hover) {
+  .tech:hover {
+    transform: translateY(-7px);
+    border-color: color-mix(in srgb, var(--brand) 45%, transparent);
+    background: var(--surface-hover);
+    box-shadow: 0 20px 44px -24px var(--brand);
+  }
 
-.tech:hover::before {
-  opacity: 1;
+  .tech:hover::before {
+    opacity: 1;
+  }
 }
 
 .tech__icon {
@@ -461,172 +416,22 @@ const featured = projects.slice(0, 3)
   transition: transform 0.5s var(--spring);
 }
 
-.tech:hover .tech__icon :deep(svg) {
-  transform: scale(1.12) rotate(-5deg);
-}
-
 .tech__name {
   position: relative;
-  font-size: 0.7rem;
+  font-size: 0.72rem;
   text-align: center;
   color: var(--muted);
   transition: color 0.3s;
 }
 
-.tech:hover .tech__name {
-  color: var(--text);
-}
+@media (hover: hover) {
+  .tech:hover .tech__icon :deep(svg) {
+    transform: scale(1.12) rotate(-5deg);
+  }
 
-/* BENTO */
-.bento {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-}
-
-.bento__card {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  padding: 1.85rem;
-  position: relative;
-  overflow: hidden;
-}
-
-.bento__card--wide {
-  grid-column: 1 / -1;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-areas:
-    "glyph glyph"
-    "eyebrow eyebrow"
-    "title body"
-    "title points";
-  align-items: start;
-  gap: 0.9rem 3rem;
-}
-
-.bento__card--wide .bento__glyph {
-  grid-area: glyph;
-}
-
-.bento__card--wide .eyebrow {
-  grid-area: eyebrow;
-}
-
-.bento__card--wide .bento__title {
-  grid-area: title;
-  font-size: clamp(1.5rem, 3vw, 2.1rem);
-  max-width: 16ch;
-}
-
-.bento__card--wide .bento__body {
-  grid-area: body;
-}
-
-.bento__card--wide .bento__points {
-  grid-area: points;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-.bento__glyph {
-  font-size: 1.5rem;
-  color: var(--violet);
-  line-height: 1;
-}
-
-.bento__title {
-  margin-top: 0.25rem;
-}
-
-.bento__body {
-  color: var(--muted);
-  font-size: 0.94rem;
-  line-height: 1.7;
-}
-
-.bento__points {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  margin-top: auto;
-  padding-top: 1.1rem;
-}
-
-.bento__points li {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  font-size: 0.84rem;
-  color: var(--muted);
-}
-
-.bento__points li::before {
-  content: "";
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: var(--cyan);
-}
-
-/* SKILLS */
-.skills__grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-}
-
-.skill {
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-  padding: 1.85rem;
-}
-
-.skill__head {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  flex-wrap: wrap;
-}
-
-.skill__glyph {
-  display: grid;
-  place-items: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 12px;
-  background: color-mix(in srgb, var(--accent) 18%, transparent);
-  color: var(--accent);
-  font-size: 1.1rem;
-}
-
-.skill__count {
-  margin-left: auto;
-  color: var(--dim);
-  font-size: 0.7rem;
-}
-
-.skill__list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.45rem;
-}
-
-.skill__list li {
-  padding: 0.3rem 0.7rem;
-  border: 1px solid var(--border);
-  border-radius: 99px;
-  font-size: 0.8rem;
-  color: var(--muted);
-  transition: all 0.3s var(--ease);
-}
-
-.skill:hover .skill__list li {
-  border-color: color-mix(in srgb, var(--accent) 45%, transparent);
-  color: var(--text);
+  .tech:hover .tech__name {
+    color: var(--text);
+  }
 }
 
 /* PROJECTS */
@@ -647,21 +452,13 @@ const featured = projects.slice(0, 3)
     max-width: 22ch;
   }
 
-  .bento {
-    grid-template-columns: repeat(2, 1fr);
+  /* the hero is a single column from here down, so the floating
+     profile card has to stay inside the gutter */
+  .profile-card {
+    top: -16px;
+    left: 4px;
   }
 
-  .bento__card--wide {
-    grid-template-columns: 1fr;
-    grid-template-areas:
-      "glyph"
-      "eyebrow"
-      "title"
-      "body"
-      "points";
-  }
-
-  .skills__grid,
   .projects-grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -672,8 +469,6 @@ const featured = projects.slice(0, 3)
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .bento,
-  .skills__grid,
   .projects-grid {
     grid-template-columns: 1fr;
   }
@@ -682,18 +477,39 @@ const featured = projects.slice(0, 3)
     justify-content: flex-start;
   }
 
-  .profile-card {
-    top: -16px;
-    left: 4px;
-  }
-
   .stackgrid {
-    grid-template-columns: repeat(auto-fit, minmax(82px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(82px, 100%), 1fr));
     gap: 8px;
   }
 
+  /* wrap the snippet instead of forcing a sideways scroll inside the card */
   .code__body {
-    font-size: 0.75rem;
+    font-size: 0.72rem;
+    padding: 1.1rem 1rem 1.3rem;
+    overflow-x: hidden;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+  }
+
+  .hero__actions {
+    width: 100%;
+  }
+
+  .hero__actions .btn {
+    flex: 1 1 auto;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 380px) {
+  /* two stacked buttons beat two cramped ones */
+  .hero__actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .hero__stats {
+    gap: 1.25rem 0.75rem;
   }
 }
 </style>

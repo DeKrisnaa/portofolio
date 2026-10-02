@@ -76,6 +76,8 @@ const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' })
   position: relative;
   padding-top: clamp(60px, 8vw, 100px);
   padding-bottom: 2rem;
+  /* keeps the last row clear of the iOS home indicator */
+  padding-bottom: calc(2rem + var(--safe-b));
   border-top: 1px solid var(--border);
 }
 
@@ -166,18 +168,23 @@ const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' })
 
 .footer__col ul {
   display: grid;
-  gap: 0.6rem;
+  gap: 0.15rem;
 }
 
 .footer__col a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap);
   color: var(--muted);
   font-size: 0.92rem;
   transition: color 0.3s, padding-left 0.3s;
 }
 
-.footer__col a:hover {
-  color: var(--text);
-  padding-left: 4px;
+@media (hover: hover) {
+  .footer__col a:hover {
+    color: var(--text);
+    padding-left: 4px;
+  }
 }
 
 .footer__bottom {
@@ -192,6 +199,9 @@ const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' })
 }
 
 .footer__top {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap);
   font-size: 0.8rem;
   color: var(--muted);
   transition: color 0.3s;
@@ -200,7 +210,6 @@ const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' })
 .footer__top:hover {
   color: var(--cyan);
 }
-
 @media (max-width: 760px) {
   .footer__grid {
     grid-template-columns: 1fr 1fr;
@@ -216,6 +225,20 @@ const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' })
 
   .cta__actions .btn {
     flex: 1;
+  }
+}
+
+@media (max-width: 640px) {
+  /* side-by-side buttons squeeze their labels past the nowrap cutoff */
+  .cta__actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .cta__actions .btn {
+    justify-content: center;
+    white-space: normal;
+    overflow-wrap: anywhere;
   }
 }
 

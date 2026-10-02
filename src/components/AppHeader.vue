@@ -15,12 +15,28 @@ const onScroll = () => {
   progress.value = max > 0 ? Math.min(y / max, 1) : 0
 }
 
+// closing on Escape and when the viewport grows past the burger breakpoint
+const onKey = (event) => {
+  if (event.key === 'Escape') open.value = false
+}
+
+const desktop = window.matchMedia('(min-width: 901px)')
+const onDesktop = (event) => {
+  if (event.matches) open.value = false
+}
+
 onMounted(() => {
   onScroll()
   window.addEventListener('scroll', onScroll, { passive: true })
+  window.addEventListener('keydown', onKey)
+  desktop.addEventListener('change', onDesktop)
 })
 
-onUnmounted(() => window.removeEventListener('scroll', onScroll))
+onUnmounted(() => {
+  window.removeEventListener('scroll', onScroll)
+  window.removeEventListener('keydown', onKey)
+  desktop.removeEventListener('change', onDesktop)
+})
 
 watch(
   () => route.path,
@@ -35,7 +51,7 @@ watch(open, (value) => {
 </script>
 
 <template>
-  <header class="header" :class="{ 'is-scrolled': scrolled }">
+  <header class="header" :class="{ 'is-scrolled': scrolled, 'is-open': open }">
     <div class="header__bar container">
       <RouterLink to="/" class="brand" aria-label="Kembali ke home">
         <span class="brand__mark">
@@ -71,7 +87,7 @@ watch(open, (value) => {
         <button
           class="burger"
           :class="{ 'is-open': open }"
-          aria-label="Buka menu"
+          :aria-label="open ? 'Tutup menu' : 'Buka menu'"
           :aria-expanded="open"
           @click="open = !open"
         >
@@ -136,8 +152,18 @@ watch(open, (value) => {
   -webkit-backdrop-filter: blur(18px) saturate(160%);
 }
 
+/* the sheet sits below the header, so the header has to go opaque too,
+   otherwise the page shows through the gap while the menu is open */
+.header.is-open {
+  background: rgba(8, 8, 11, 0.96);
+  border-bottom-color: var(--border);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+}
+
 .header__bar {
-  height: var(--header-h);
+  height: var(--header-total);
+  padding-top: var(--safe-t);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -149,6 +175,7 @@ watch(open, (value) => {
   align-items: center;
   gap: 0.7rem;
   flex-shrink: 0;
+  min-height: var(--tap);
 }
 
 .brand__mark {
@@ -187,7 +214,7 @@ watch(open, (value) => {
 .brand__text em {
   font-style: normal;
   font-family: var(--font-mono);
-  font-size: 0.62rem;
+  font-size: 0.72rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--dim);
@@ -241,8 +268,9 @@ watch(open, (value) => {
 
 .burger {
   display: none;
-  width: 42px;
-  height: 42px;
+  width: var(--tap);
+  height: var(--tap);
+  flex-shrink: 0;
   border: 1px solid var(--border-strong);
   border-radius: 999px;
   position: relative;
@@ -261,11 +289,13 @@ watch(open, (value) => {
 }
 
 .burger span:first-child {
-  top: 17px;
+  top: 50%;
+  margin-top: -5px;
 }
 
 .burger span:last-child {
-  bottom: 17px;
+  bottom: 50%;
+  margin-bottom: -5px;
 }
 
 .burger.is-open span:first-child {
@@ -276,15 +306,24 @@ watch(open, (value) => {
   transform: translateX(-50%) translateY(-3.5px) rotate(-45deg);
 }
 
+/* covers the whole viewport and sits behind the header (z-index 95 < 100),
+   so there is no seam between the two and no magic offset to keep in sync */
 .sheet {
   position: fixed;
-  inset: var(--header-h) 0 0;
+  inset: 0;
   z-index: 95;
   padding: 2.5rem 24px;
+  padding-top: calc(var(--header-total) + 1.5rem);
+  padding-left: max(24px, var(--safe-l));
+  padding-right: max(24px, var(--safe-r));
+  padding-bottom: calc(2.5rem + var(--safe-b));
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   gap: 2rem;
+  /* scrolls on short screens instead of clipping the last link */
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
   background: rgba(8, 8, 11, 0.96);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
@@ -299,10 +338,11 @@ watch(open, (value) => {
   display: flex;
   align-items: baseline;
   gap: 1rem;
+  min-height: var(--tap);
   padding: 0.9rem 0;
   border-bottom: 1px solid var(--border);
   font-family: var(--font-display);
-  font-size: 1.75rem;
+  font-size: clamp(1.5rem, 7.5vw, 1.75rem);
   font-weight: 600;
   letter-spacing: -0.03em;
   color: var(--muted);
@@ -323,6 +363,7 @@ watch(open, (value) => {
   font-family: var(--font-display);
   font-size: 1.05rem;
   color: var(--text);
+  overflow-wrap: anywhere;
 }
 
 .sheet__socials {
@@ -333,6 +374,7 @@ watch(open, (value) => {
 }
 
 .sheet__foot {
+  margin-top: auto;
   opacity: 0;
   animation: sheet-in 0.5s var(--ease) 0.35s forwards;
 }
@@ -365,11 +407,40 @@ watch(open, (value) => {
   .burger {
     display: block;
   }
+
+  .header__bar {
+    gap: 0.75rem;
+  }
+}
+
+/* landscape phones and short windows: keep the menu scrollable, not cramped */
+@media (max-height: 560px) {
+  .sheet {
+    /* still has to clear the header, the sheet sits behind it */
+    padding-top: calc(var(--header-total) + 0.75rem);
+    gap: 1.25rem;
+  }
+
+  .sheet__link {
+    padding: 0.5rem 0;
+    font-size: 1.35rem;
+  }
 }
 
 @media (max-width: 400px) {
   .brand__text {
     display: none;
+  }
+}
+
+/* iPad and other wide touch screens still get the desktop nav, so it
+   needs to clear the tap-target floor too */
+@media (hover: none) and (min-width: 901px) {
+  .nav__link,
+  .header__cta {
+    min-height: var(--tap);
+    display: inline-flex;
+    align-items: center;
   }
 }
 </style>

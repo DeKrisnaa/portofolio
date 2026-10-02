@@ -95,12 +95,15 @@ const countFor = (filter) =>
   background: rgba(255, 255, 255, 0.025);
   backdrop-filter: blur(10px);
   flex-wrap: wrap;
+  max-width: 100%;
 }
 
 .filters__btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
+  min-height: var(--tap);
   padding: 0.5rem 1rem;
   border-radius: 99px;
   font-size: 0.85rem;
@@ -108,8 +111,10 @@ const countFor = (filter) =>
   transition: color 0.3s, background 0.3s;
 }
 
-.filters__btn:hover {
-  color: var(--text);
+@media (hover: hover) {
+  .filters__btn:hover {
+    color: var(--text);
+  }
 }
 
 .filters__btn.is-active {
@@ -123,7 +128,7 @@ const countFor = (filter) =>
   border-radius: 99px;
   background: rgba(255, 255, 255, 0.08);
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: 0.72rem;
 }
 
 .filters__btn.is-active .filters__count {

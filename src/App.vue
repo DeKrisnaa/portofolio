@@ -23,6 +23,8 @@ import CursorGlow from './components/CursorGlow.vue'
 .app-shell {
   position: relative;
   min-height: 100vh;
+  /* dvh follows the collapsing mobile browser chrome */
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
 }
@@ -31,5 +33,6 @@ import CursorGlow from './components/CursorGlow.vue'
   position: relative;
   z-index: 1;
   flex: 1;
+  min-width: 0;
 }
 </style>
