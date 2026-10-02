@@ -1,13 +1,17 @@
 <script setup>
-import { RouterLink } from 'vue-router'
-import SectionHeading from '../components/SectionHeading.vue'
-import Marquee from '../components/Marquee.vue'
-import { profile, education, organizations, marqueeItems } from '../data/portfolio'
+import SectionHeading from './SectionHeading.vue'
+import { profile, education, organizations } from '../data/portfolio'
 </script>
 
 <template>
-  <div>
-    <section class="intro container">
+  <section id="about" class="section container">
+    <SectionHeading
+      eyebrow="Tentang"
+      title="Saya DeKrisna, belajar Informatika dan suka membangun produk."
+      description="Profil singkat, pendidikan, dan organisasi yang saya ikuti."
+    />
+
+    <div class="intro">
       <div class="intro__media" v-reveal>
         <div class="portrait glass" v-spotlight>
           <img class="portrait__photo" :src="profile.photo" :alt="`Foto ${profile.name}`" />
@@ -23,29 +27,23 @@ import { profile, education, organizations, marqueeItems } from '../data/portfol
         </div>
       </div>
 
-      <div class="intro__copy">
-        <span class="eyebrow" v-reveal>Perkenalan</span>
-        <h1 class="display intro__title" v-reveal="70">
-          Saya {{ profile.name }}, belajar Informatika dan suka
-          <span class="grad-text">membangun produk</span>.
-        </h1>
-        <div v-reveal="140" class="intro__bio">
-          <p v-for="paragraph in profile.bio" :key="paragraph" class="lead">{{ paragraph }}</p>
-        </div>
+      <div class="intro__bio" v-reveal="90">
+        <p v-for="paragraph in profile.bio" :key="paragraph" class="lead">{{ paragraph }}</p>
 
-        <div class="intro__actions" v-reveal="210">
-          <RouterLink to="/projects" class="btn btn--primary">
-            Proyek saya
+        <div class="intro__actions">
+          <a href="#contact" class="btn btn--primary">
+            Hubungi saya
             <span class="arrow">→</span>
-          </RouterLink>
-          <RouterLink to="/contact" class="btn btn--ghost">Hubungi saya</RouterLink>
+          </a>
+          <a :href="profile.cv" class="btn btn--ghost" download>
+            Download CV
+            <span class="arrow">↓</span>
+          </a>
         </div>
       </div>
-    </section>
+    </div>
 
-    <Marquee :items="marqueeItems" reverse />
-
-    <section class="section container">
+    <div class="block">
       <SectionHeading
         eyebrow="Pendidikan"
         title="Riwayat pendidikan saya."
@@ -65,13 +63,13 @@ import { profile, education, organizations, marqueeItems } from '../data/portfol
           <p class="edu__note">{{ item.note }}</p>
         </article>
       </div>
-    </section>
+    </div>
 
-    <section class="section container">
+    <div class="block">
       <SectionHeading
         eyebrow="Organisasi"
         title="Tempat saya berkarya di luar kelas."
-        description="Aktivitas yang membentuk cara saya bekerja — dari kepengurusan kampus sampai_channel kreatif."
+        description="Aktivitas yang membentuk cara saya bekerja — dari kepengurusan kampus sampai channel kreatif."
       />
       <div class="orgs">
         <article
@@ -99,22 +97,21 @@ import { profile, education, organizations, marqueeItems } from '../data/portfol
           </ul>
         </article>
       </div>
-    </section>
-  </div>
+    </div>
+  </section>
 </template>
 
 <style scoped>
-/* INTRO */
 .intro {
   display: grid;
   grid-template-columns: 0.85fr 1.15fr;
   gap: clamp(2rem, 5vw, 4.5rem);
   align-items: center;
-  padding-block: clamp(3rem, 8vw, 6rem) clamp(3rem, 6vw, 5rem);
+  padding-block: clamp(1rem, 3vw, 2rem) clamp(3rem, 6vw, 5rem);
 }
 
 .intro__media,
-.intro__copy {
+.intro__bio {
   min-width: 0;
 }
 
@@ -182,17 +179,6 @@ import { profile, education, organizations, marqueeItems } from '../data/portfol
   animation: float-y 7.5s ease-in-out 0.8s infinite;
 }
 
-.intro__copy {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 1.35rem;
-}
-
-.intro__title {
-  max-width: 19ch;
-}
-
 .intro__bio {
   display: grid;
   gap: 0.9rem;
@@ -203,6 +189,10 @@ import { profile, education, organizations, marqueeItems } from '../data/portfol
   gap: 0.7rem;
   flex-wrap: wrap;
   margin-top: 0.5rem;
+}
+
+.block + .block {
+  margin-top: clamp(3.5rem, 7vw, 6rem);
 }
 
 /* EDUCATION */
@@ -352,10 +342,6 @@ import { profile, education, organizations, marqueeItems } from '../data/portfol
     text-align: left;
   }
 
-  .intro__copy {
-    align-items: flex-start;
-  }
-
   .education {
     grid-template-columns: 1fr;
   }
@@ -377,7 +363,6 @@ import { profile, education, organizations, marqueeItems } from '../data/portfol
     padding: 1.35rem;
   }
 
-  /* the photo is the first thing on the page, so let it use the full width */
   .portrait {
     width: min(340px, 100%);
   }

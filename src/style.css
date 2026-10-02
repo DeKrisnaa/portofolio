@@ -95,6 +95,16 @@ button,
   -webkit-tap-highlight-color: transparent;
 }
 
+/* anchor targets land below the sticky header instead of behind it */
+[id] {
+  scroll-margin-top: calc(var(--header-total) + 1.5rem);
+}
+
+/* Home is the one target that should sit flush against the header */
+#home {
+  scroll-margin-top: var(--header-total);
+}
+
 /* ambient gradient mesh */
 body::before {
   content: "";
@@ -529,6 +539,12 @@ ol {
   }
   66% {
     transform: translate3d(-3%, 3%, 0) scale(0.97);
+  }
+}
+
+@keyframes rotate-ring {
+  to {
+    transform: rotate(1turn);
   }
 }
 

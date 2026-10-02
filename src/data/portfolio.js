@@ -1,13 +1,14 @@
 export const profile = {
   name: 'DeKrisna',
+  handle: 'DeKrisnaa',
   initials: 'DK',
   photo: '/foto-diri.jpeg',
-  role: 'Mahasiswa Informatika',
-  title: 'Web Developer',
+  role: 'Junior Developer',
   status: 'Open untuk magang & freelance',
   location: 'Bali, Indonesia',
   email: 'dkrisna821@gmail.com',
   availability: 'Respon dalam 1x24 jam',
+  cv: '/CV-DeKrisna.pdf',
   bio: [
     'Halo! Saya DeKrisna, mahasiswa Informatika di Primakara University, Bali. Saya menikmati proses mengubah ide menjadi produk web yang benar-benar bisa dipakai orang lain — mulai dari merancang tampilan sampai merapikan kodenya.',
     'Saat ini saya fokus belajar pengembangan web modern dengan Next.js, TypeScript, dan Tailwind CSS. Saya suka antarmuka yang bersih, cepat, dan nyaman digunakan, serta kode yang masih mudah dipahami saat dibaca ulang.',
@@ -21,11 +22,15 @@ export const profile = {
   ]
 }
 
+/* one long page, so navigation is a set of anchors instead of routes.
+   keep this in document order, the nav highlights the first visible one */
+export const sections = ['home', 'about', 'projects', 'contact']
+
 export const navLinks = [
-  { to: '/', label: 'Home' },
-  { to: '/about', label: 'Tentang' },
-  { to: '/projects', label: 'Proyek' },
-  { to: '/contact', label: 'Kontak' }
+  { id: 'home', label: 'Home' },
+  { id: 'about', label: 'Tentang' },
+  { id: 'projects', label: 'Proyek' },
+  { id: 'contact', label: 'Kontak' }
 ]
 
 export const stats = [
@@ -58,44 +63,15 @@ export const projects = [
     year: '2026',
     glyph: '◈',
     gradient: 'linear-gradient(135deg, #7c5cff 0%, #22d3ee 100%)',
+    shot: '/smartcash.png',
     summary:
       'Aplikasi pencatatan keuangan berbasis web dengan halaman autentikasi dan area pengguna. Dibangun memakai Next.js dan TypeScript, lalu dideploy ke Vercel.',
     stack: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Vercel'],
     metric: 'Live di Vercel',
     repo: 'https://github.com/DeKrisnaa/SmartCash',
     live: 'https://smartcash-mu.vercel.app'
-  },
-  {
-    id: 2,
-    title: 'dekrizz — Website Pribadi',
-    category: 'Portofolio',
-    year: '2026',
-    glyph: '◐',
-    gradient: 'linear-gradient(135deg, #22d3ee 0%, #a3e635 100%)',
-    summary:
-      'Website personal berisi profil, riwayat pendidikan, dan kontak. Menjadi tempat menampilkan perjalanan belajar web development sekaligus karya konten.',
-    stack: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Vercel'],
-    metric: 'Live di Vercel',
-    repo: 'https://github.com/DeKrisnaa/dekrizz',
-    live: 'https://dekrizz.vercel.app'
-  },
-  {
-    id: 3,
-    title: 'dekrisna_portofolio',
-    category: 'Portofolio',
-    year: '2026',
-    glyph: '◑',
-    gradient: 'linear-gradient(135deg, #ff4d8d 0%, #fbbf24 100%)',
-    summary:
-      'Portofolio web versi pertama yang dibangun dari HTML dan CSS dasar, lalu dipublikasikan secara gratis memakai GitHub Pages.',
-    stack: ['HTML', 'CSS', 'JavaScript', 'GitHub Pages'],
-    metric: 'GitHub Pages',
-    repo: 'https://github.com/DeKrisnaa/dekrisna_portofolio',
-    live: 'https://dekrisnaa.github.io/dekrisna_portofolio/'
   }
 ]
-
-export const projectFilters = ['Semua', 'Web App', 'Portofolio']
 
 export const education = [
   {

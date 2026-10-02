@@ -1,12 +1,12 @@
 <script setup>
 import { onMounted, onUnmounted, ref, watch } from 'vue'
-import { RouterLink, useRoute } from 'vue-router'
-import { navLinks, profile } from '../data/portfolio'
+import { navLinks, profile, sections } from '../data/portfolio'
+import { useActiveSection } from '../composables/useActiveSection'
 
-const route = useRoute()
 const scrolled = ref(false)
 const open = ref(false)
 const progress = ref(0)
+const active = useActiveSection(sections)
 
 const onScroll = () => {
   const y = window.scrollY
@@ -38,13 +38,6 @@ onUnmounted(() => {
   desktop.removeEventListener('change', onDesktop)
 })
 
-watch(
-  () => route.path,
-  () => {
-    open.value = false
-  }
-)
-
 watch(open, (value) => {
   document.body.style.overflow = value ? 'hidden' : ''
 })
@@ -53,7 +46,7 @@ watch(open, (value) => {
 <template>
   <header class="header" :class="{ 'is-scrolled': scrolled, 'is-open': open }">
     <div class="header__bar container">
-      <RouterLink to="/" class="brand" aria-label="Kembali ke home">
+      <a href="#home" class="brand" aria-label="Kembali ke atas">
         <span class="brand__mark">
           <img :src="profile.photo" :alt="profile.name" />
         </span>
@@ -61,18 +54,18 @@ watch(open, (value) => {
           <strong>{{ profile.name }}</strong>
           <em>{{ profile.role }}</em>
         </span>
-      </RouterLink>
+      </a>
 
       <nav class="nav" aria-label="Navigasi utama">
-        <RouterLink
+        <a
           v-for="link in navLinks"
-          :key="link.to"
-          :to="link.to"
+          :key="link.id"
+          :href="`#${link.id}`"
           class="nav__link"
-          active-class="is-active"
+          :class="{ 'is-active': active === link.id }"
         >
           {{ link.label }}
-        </RouterLink>
+        </a>
       </nav>
 
       <div class="header__actions">
@@ -80,10 +73,10 @@ watch(open, (value) => {
           <i class="dot"></i>
           <span>Open to work</span>
         </span>
-        <RouterLink to="/contact" class="btn btn--primary btn--sm header__cta">
+        <a href="#contact" class="btn btn--primary btn--sm header__cta">
           Hire me
           <span class="arrow">→</span>
-        </RouterLink>
+        </a>
         <button
           class="burger"
           :class="{ 'is-open': open }"
@@ -103,17 +96,18 @@ watch(open, (value) => {
       <transition name="sheet">
         <div v-if="open" class="sheet">
           <nav class="sheet__nav">
-            <RouterLink
+            <a
               v-for="(link, i) in navLinks"
-              :key="link.to"
-              :to="link.to"
+              :key="link.id"
+              :href="`#${link.id}`"
               class="sheet__link"
+              :class="{ 'is-active': active === link.id }"
               :style="{ animationDelay: `${i * 55 + 90}ms` }"
-              active-class="is-active"
+              @click="open = false"
             >
               <span class="mono">0{{ i + 1 }}</span>
               {{ link.label }}
-            </RouterLink>
+            </a>
           </nav>
           <div class="sheet__foot">
             <a :href="`mailto:${profile.email}`" class="sheet__mail">{{ profile.email }}</a>

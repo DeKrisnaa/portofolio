@@ -1,6 +1,6 @@
 <script setup>
 import { reactive, ref } from 'vue'
-import SectionHeading from '../components/SectionHeading.vue'
+import SectionHeading from './SectionHeading.vue'
 import { contactInfo, profile } from '../data/portfolio'
 
 const form = reactive({
@@ -48,19 +48,14 @@ const reset = () => {
 </script>
 
 <template>
-  <div>
-    <section class="container page-head">
-      <span class="eyebrow" v-reveal>Kontak</span>
-      <h1 class="display page-head__title" v-reveal="70">
-        Mari <span class="grad-text">bicara</span> soal proyek atau peluang magang.
-      </h1>
-      <p class="lead" v-reveal="140">
-        Saya cukup sering membuka email. Ceritakan sedikit tentang kebutuhanmu, dan saya akan balas
-        dengan pertanyaan yang tepat. {{ profile.availability }}.
-      </p>
-    </section>
+  <section id="contact" class="section container">
+    <SectionHeading
+      eyebrow="Kontak"
+      title="Mari bicara soal proyek atau peluang magang."
+      :description="`Saya cukup sering membuka email. Ceritakan sedikit tentang kebutuhanmu, dan saya akan balas dengan pertanyaan yang tepat. ${profile.availability}.`"
+    />
 
-    <section class="container contact">
+    <div class="contact">
       <aside class="contact__side">
         <ul class="info">
           <li
@@ -188,28 +183,16 @@ const reset = () => {
           </div>
         </transition>
       </div>
-    </section>
-  </div>
+    </div>
+  </section>
 </template>
 
 <style scoped>
-.page-head {
-  padding-block: clamp(3rem, 7vw, 5.5rem) clamp(2rem, 4vw, 3rem);
-  display: grid;
-  gap: 1.25rem;
-  max-width: 880px;
-}
-
-.page-head__title {
-  max-width: 20ch;
-}
-
 .contact {
   display: grid;
   grid-template-columns: 0.85fr 1.15fr;
   gap: 24px;
   align-items: start;
-  padding-bottom: 2rem;
 }
 
 .contact__side,

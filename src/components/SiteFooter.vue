@@ -1,5 +1,4 @@
 <script setup>
-import { RouterLink } from 'vue-router'
 import { profile, navLinks } from '../data/portfolio'
 
 const year = new Date().getFullYear()
@@ -23,10 +22,10 @@ const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' })
           </p>
         </div>
         <div class="cta__actions">
-          <RouterLink to="/contact" class="btn btn--primary">
+          <a href="#contact" class="btn btn--primary">
             Mulai diskusi
             <span class="arrow">→</span>
-          </RouterLink>
+          </a>
           <a :href="`mailto:${profile.email}`" class="btn btn--ghost">{{ profile.email }}</a>
         </div>
       </div>
@@ -36,14 +35,14 @@ const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' })
           <span class="brand-mark">
             <img :src="profile.photo" :alt="profile.name" />
           </span>
-          <p>{{ profile.name }} — {{ profile.title }} · {{ profile.location }}</p>
+          <p>{{ profile.name }} — {{ profile.role }} · {{ profile.location }}</p>
         </div>
 
         <div class="footer__col">
           <h4>Navigasi</h4>
           <ul>
-            <li v-for="link in navLinks" :key="link.to">
-              <RouterLink :to="link.to">{{ link.label }}</RouterLink>
+            <li v-for="link in navLinks" :key="link.id">
+              <a :href="`#${link.id}`">{{ link.label }}</a>
             </li>
           </ul>
         </div>

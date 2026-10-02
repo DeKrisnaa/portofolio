@@ -5,16 +5,22 @@ import App from './App.vue'
 import { reveal, spotlight } from './directives'
 
 import Home from './pages/Home.vue'
-import About from './pages/About.vue'
-import Projects from './pages/Projects.vue'
-import Contact from './pages/Contact.vue'
+
+/* the site is one long page now, so the only real route is "/" and the
+   sections are anchors. These keep old bookmarks landing in the right spot. */
+const legacyAnchors = {
+  skills: '#skills',
+  projects: '#projects',
+  about: '#about',
+  contact: '#contact'
+}
 
 const routes = [
   { path: '/', name: 'home', component: Home },
-  { path: '/about', name: 'about', component: About },
-  { path: '/projects', name: 'projects', component: Projects },
-  { path: '/contact', name: 'contact', component: Contact },
-  { path: '/:pathMatch(.*)*', redirect: '/' }
+  {
+    path: '/:pathMatch(.*)*',
+    redirect: (to) => ({ path: '/', hash: legacyAnchors[to.params.pathMatch[0]] ?? '' })
+  }
 ]
 
 const router = createRouter({
@@ -22,6 +28,7 @@ const router = createRouter({
   routes,
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) return savedPosition
+    if (to.hash) return { el: to.hash, behavior: 'smooth' }
     return { top: 0 }
   }
 })

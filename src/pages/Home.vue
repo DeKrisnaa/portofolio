@@ -1,19 +1,16 @@
 <script setup>
-import { RouterLink } from 'vue-router'
-import SectionHeading from '../components/SectionHeading.vue'
-import ProjectCard from '../components/ProjectCard.vue'
 import Marquee from '../components/Marquee.vue'
 import StatCounter from '../components/StatCounter.vue'
-import { profile, projects, marqueeItems, stats } from '../data/portfolio'
-import { techStack } from '../data/techStack'
-
-const featured = projects.slice(0, 3)
+import ProjectsSection from '../components/ProjectsSection.vue'
+import AboutSection from '../components/AboutSection.vue'
+import ContactSection from '../components/ContactSection.vue'
+import { profile, marqueeItems, stats } from '../data/portfolio'
 </script>
 
 <template>
   <div>
     <!-- HERO -->
-    <section class="hero container">
+    <section id="home" class="hero container">
       <div class="hero__copy">
         <span class="pill" v-reveal>
           <i class="dot"></i>
@@ -21,22 +18,28 @@ const featured = projects.slice(0, 3)
         </span>
 
         <h1 class="display hero__title" v-reveal="80">
-          Mahasiswa Informatika yang membangun
-          <span class="grad-text">produk digital</span>
-          yang rapi dan cepat.
+          Hi, I'm <span class="grad-text">{{ profile.handle }}</span>
         </h1>
 
+        <p class="hero__role" v-reveal="120">
+          Junior Developer | Content Creator
+        </p>
+
         <p class="lead hero__lead" v-reveal="160">
-          Halo, saya {{ profile.name }}. Saya merancang dan mengembangkan aplikasi web end-to-end:
-          dari desain antarmuka, API, sampai deployment. Fokus pada detail yang membuat produk terasa selesai.
+          Mahasiswa Informatika di Primakara University, Bali. Saya membangun aplikasi web dari
+          desain antarmuka sampai deployment, dengan fokus pada detail yang membuat produk terasa
+          selesai.
         </p>
 
         <div class="hero__actions" v-reveal="240">
-          <RouterLink to="/projects" class="btn btn--primary">
+          <a href="#projects" class="btn btn--primary">
             Lihat proyek
             <span class="arrow">→</span>
-          </RouterLink>
-          <RouterLink to="/contact" class="btn btn--ghost">Hubungi saya</RouterLink>
+          </a>
+          <a :href="profile.cv" class="btn btn--ghost" download>
+            Download CV
+            <span class="arrow">↓</span>
+          </a>
         </div>
 
         <dl class="hero__stats" v-reveal="320">
@@ -51,79 +54,18 @@ const featured = projects.slice(0, 3)
       </div>
 
       <div class="hero__visual" v-reveal="180">
-        <div class="code glass" v-spotlight>
-          <div class="code__bar">
-            <span class="code__dots"><i></i><i></i><i></i></span>
-            <span class="mono code__file">profile.config.ts</span>
-          </div>
-          <pre class="code__body mono"><code><span class="c-com">// masih belajar, tapi serius</span>
-<span class="c-key">export const</span> <span class="c-var">profile</span> = {
-  <span class="c-prop">nama</span>: <span class="c-str">'{{ profile.name }}'</span>,
-  <span class="c-prop">jurusan</span>: <span class="c-str">'Informatika'</span>,
-  <span class="c-prop">stack</span>: [<span class="c-str">'Next.js'</span>, <span class="c-str">'TypeScript'</span>, <span class="c-str">'Tailwind'</span>],
-  <span class="c-prop">fokus</span>: <span class="c-str">'Web Development'</span>,
-  <span class="c-prop">lokasi</span>: <span class="c-str">'{{ profile.location }}'</span>,
-  <span class="c-prop">kerjakan</span>: <span class="c-bool">true</span>
-}<span class="code__cursor"></span></code></pre>
-        </div>
-
-        <div class="profile-card glass" v-spotlight>
-          <span class="profile-card__avatar">
-            <img :src="profile.photo" :alt="profile.name" />
-          </span>
-          <span class="profile-card__meta">
-            <strong>{{ profile.name }}</strong>
-            <em>{{ profile.role }}</em>
-          </span>
-        </div>
-      </div>
-
-      <div class="hero__stack" v-reveal="140">
-        <div class="hero__stack-head">
-          <span class="eyebrow">Toolbox harian</span>
-          <p class="mono hero__stack-note">
-            {{ techStack.length }} teknologi · dari markup sampai database
-          </p>
-        </div>
-        <ul class="stackgrid">
-          <li
-            v-for="tech in techStack"
-            :key="tech.name"
-            class="tech glass"
-            :style="{ '--brand': tech.color }"
-          >
-            <span class="tech__icon" v-html="tech.svg"></span>
-            <span class="tech__name">{{ tech.name }}</span>
-          </li>
-        </ul>
+        <figure class="portrait glass" v-spotlight>
+          <img class="portrait__photo" :src="profile.photo" :alt="`Foto ${profile.name}`" />
+          <span class="portrait__glow" aria-hidden="true"></span>
+        </figure>
       </div>
     </section>
 
     <Marquee :items="marqueeItems" />
 
-    <!-- FEATURED PROJECTS -->
-    <section class="section container">
-      <SectionHeading
-        eyebrow="Proyek pilihan"
-        title="Beberapa hal yang saya bangun baru-baru ini."
-      >
-        <template #action>
-          <RouterLink to="/projects" class="btn btn--ghost btn--sm">
-            Semua proyek
-            <span class="arrow">→</span>
-          </RouterLink>
-        </template>
-      </SectionHeading>
-
-      <div class="projects-grid">
-        <ProjectCard
-          v-for="(project, index) in featured"
-          :key="project.id"
-          :project="project"
-          :index="index"
-        />
-      </div>
-    </section>
+    <AboutSection />
+    <ProjectsSection />
+    <ContactSection />
   </div>
 </template>
 
@@ -137,11 +79,10 @@ const featured = projects.slice(0, 3)
   padding-block: clamp(3rem, 8vw, 6.5rem) clamp(3rem, 6vw, 5rem);
 }
 
-/* grid children default to min-width:auto, which lets the <pre> below
+/* grid children default to min-width:auto, which lets the portrait below
    push the whole page sideways on narrow screens */
 .hero__copy,
-.hero__visual,
-.hero__stack {
+.hero__visual {
   min-width: 0;
 }
 
@@ -154,6 +95,15 @@ const featured = projects.slice(0, 3)
 
 .hero__title {
   max-width: 17ch;
+}
+
+.hero__role {
+  margin-top: -0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--cyan);
 }
 
 .hero__lead {
@@ -191,254 +141,92 @@ const featured = projects.slice(0, 3)
   font-family: var(--font-mono);
 }
 
-/* CODE CARD */
+/* HERO PORTRAIT */
 .hero__visual {
   position: relative;
-}
-
-.code {
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  box-shadow: var(--shadow), 0 40px 90px -50px rgba(124, 92, 255, 0.9);
-  animation: float-y 9s ease-in-out infinite;
-}
-
-.code__bar {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 0.85rem 1.1rem;
-  border-bottom: 1px solid var(--border);
-  background: rgba(255, 255, 255, 0.02);
-}
-
-.code__dots {
-  display: inline-flex;
-  gap: 6px;
-}
-
-.code__dots i {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: #2a2a35;
-}
-
-.code__dots i:first-child {
-  background: #ff5f57;
-}
-
-.code__dots i:nth-child(2) {
-  background: #febc2e;
-}
-
-.code__dots i:nth-child(3) {
-  background: #28c840;
-}
-
-.code__file {
-  color: var(--dim);
-  font-size: 0.72rem;
-}
-
-.code__body {
-  padding: 1.35rem 1.4rem 1.6rem;
-  font-size: 0.82rem;
-  line-height: 1.85;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  color: #d6d6e0;
-}
-
-.c-com {
-  color: #5c5c6e;
-}
-
-.c-key {
-  color: var(--violet);
-}
-
-.c-var {
-  color: var(--cyan);
-}
-
-.c-prop {
-  color: #9b9ba7;
-}
-
-.c-str {
-  color: var(--lime);
-}
-
-.c-bool {
-  color: var(--amber);
-}
-
-.code__cursor {
-  display: inline-block;
-  width: 8px;
-  height: 15px;
-  margin-left: 3px;
-  vertical-align: middle;
-  background: var(--cyan);
-  animation: blink 1.1s step-end infinite;
-}
-
-/* HERO PROFILE CARD */
-.profile-card {
-  position: absolute;
-  top: -20px;
-  left: -16px;
-  z-index: 2;
-  display: flex;
-  align-items: center;
-  gap: 0.7rem;
-  padding: 0.55rem 1rem 0.55rem 0.55rem;
-  border-radius: 99px;
-  box-shadow: var(--shadow);
-  animation: float-y 7s ease-in-out 0.4s infinite;
-}
-
-.profile-card__avatar {
-  flex-shrink: 0;
-  width: 42px;
-  height: 42px;
-  padding: 2px;
-  border-radius: 50%;
-  background: var(--gradient);
-  overflow: hidden;
-}
-
-.profile-card__avatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center 18%;
-  border-radius: 50%;
-}
-
-.profile-card__meta {
-  display: grid;
-  line-height: 1.2;
-}
-
-.profile-card__meta strong {
-  font-family: var(--font-display);
-  font-size: 0.86rem;
-  letter-spacing: -0.02em;
-}
-
-.profile-card__meta em {
-  font-style: normal;
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--dim);
-}
-
-/* HERO TECH STACK */
-.hero__stack {
-  grid-column: 1 / -1;
-  display: grid;
-  gap: 1.35rem;
-  margin-top: clamp(1rem, 3vw, 2.25rem);
-  padding-top: clamp(1.75rem, 4vw, 2.5rem);
-  border-top: 1px solid var(--border);
-}
-
-.hero__stack-head {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-
-.hero__stack-note {
-  color: var(--dim);
-  font-size: 0.72rem;
-}
-
-.stackgrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(96px, 100%), 1fr));
-  gap: 12px;
-}
-
-.tech {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.6rem;
-  padding: 1.05rem 0.5rem;
-  border-radius: var(--radius);
-  overflow: hidden;
-  min-width: 0;
-  transition: transform 0.45s var(--ease), border-color 0.4s, background 0.4s, box-shadow 0.45s;
-}
-
-.tech::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  opacity: 0.45;
-  transition: opacity 0.4s;
-  background: radial-gradient(70% 65% at 50% 0%, color-mix(in srgb, var(--brand) 24%, transparent), transparent 72%);
-}
-
-@media (hover: hover) {
-  .tech:hover {
-    transform: translateY(-7px);
-    border-color: color-mix(in srgb, var(--brand) 45%, transparent);
-    background: var(--surface-hover);
-    box-shadow: 0 20px 44px -24px var(--brand);
-  }
-
-  .tech:hover::before {
-    opacity: 1;
-  }
-}
-
-.tech__icon {
-  position: relative;
-  width: 34px;
-  height: 34px;
   display: grid;
   place-items: center;
 }
 
-.tech__icon :deep(svg) {
-  width: 100%;
-  height: 100%;
-  transition: transform 0.5s var(--spring);
+.portrait {
+  position: relative;
+  width: min(380px, 100%);
+  aspect-ratio: 4 / 5;
+  margin: 0;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow), 0 44px 100px -55px rgba(124, 92, 255, 0.95);
+  animation: float-y 9s ease-in-out infinite;
+  /* subtle animated border */
+  background: radial-gradient(
+      130% 120% at 50% 10%,
+      rgba(255, 255, 255, 0.16),
+      transparent 60%
+    ),
+    var(--bg);
+  overflow: hidden;
 }
 
-.tech__name {
+.portrait::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: conic-gradient(
+    from 180deg,
+    rgba(124, 92, 255, 0) 0deg,
+    rgba(124, 92, 255, 0.32) 55deg,
+    rgba(34, 211, 238, 0.22) 110deg,
+    rgba(163, 230, 53, 0.16) 160deg,
+    rgba(124, 92, 255, 0) 360deg
+  );
+  animation: rotate-ring 8s linear infinite;
+  filter: blur(0.4px);
+  opacity: 0.85;
+}
+
+.portrait::after {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  border-radius: calc(var(--radius-xl) - 2px);
+  background: var(--bg);
+}
+
+.portrait__photo {
   position: relative;
-  font-size: 0.72rem;
-  text-align: center;
-  color: var(--muted);
-  transition: color 0.3s;
+  z-index: 1;
+  display: block;
+  width: calc(100% - 8px);
+  height: calc(100% - 8px);
+  margin: 4px;
+  object-fit: cover;
+  object-position: center 18%;
+  border-radius: calc(var(--radius-xl) - 8px);
+  background: rgba(8, 8, 11, 0.5);
+  transition: transform 1.1s var(--ease);
+  /* subtle parallax on hover */
+  transform-origin: center;
+  will-change: transform;
 }
 
 @media (hover: hover) {
-  .tech:hover .tech__icon :deep(svg) {
-    transform: scale(1.12) rotate(-5deg);
-  }
-
-  .tech:hover .tech__name {
-    color: var(--text);
+  .portrait:hover .portrait__photo {
+    transform: translateY(-2px) scale(1.03);
   }
 }
 
-/* PROJECTS */
-.projects-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
+.portrait__glow {
+  position: absolute;
+  inset: 4px;
+  z-index: 2;
+  pointer-events: none;
+  border-radius: calc(var(--radius-xl) - 8px);
+  background: radial-gradient(
+      120% 90% at 50% 0%,
+      rgba(255, 255, 255, 0.16),
+      transparent 65%
+    ),
+    linear-gradient(180deg, transparent 55%, rgba(8, 8, 11, 0.65));
 }
 
 /* RESPONSIVE */
@@ -452,43 +240,14 @@ const featured = projects.slice(0, 3)
     max-width: 22ch;
   }
 
-  /* the hero is a single column from here down, so the floating
-     profile card has to stay inside the gutter */
-  .profile-card {
-    top: -16px;
-    left: 4px;
-  }
-
-  .projects-grid {
-    grid-template-columns: repeat(2, 1fr);
+  .portrait {
+    width: min(340px, 100%);
   }
 }
 
 @media (max-width: 640px) {
   .hero__stats {
     grid-template-columns: repeat(2, 1fr);
-  }
-
-  .projects-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .hero__stack-head {
-    justify-content: flex-start;
-  }
-
-  .stackgrid {
-    grid-template-columns: repeat(auto-fit, minmax(min(82px, 100%), 1fr));
-    gap: 8px;
-  }
-
-  /* wrap the snippet instead of forcing a sideways scroll inside the card */
-  .code__body {
-    font-size: 0.72rem;
-    padding: 1.1rem 1rem 1.3rem;
-    overflow-x: hidden;
-    white-space: pre-wrap;
-    overflow-wrap: break-word;
   }
 
   .hero__actions {
