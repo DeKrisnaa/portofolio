@@ -4,43 +4,43 @@
 :root {
   color-scheme: dark;
 
-  --bg: #08080b;
-  --bg-soft: #0c0c11;
-  --surface: rgba(255, 255, 255, 0.035);
-  --surface-hover: rgba(255, 255, 255, 0.065);
-  --border: rgba(255, 255, 255, 0.08);
-  --border-strong: rgba(255, 255, 255, 0.16);
+  --bg: #0a0a0f;
+  --bg-soft: #14141b;
+  --surface: rgba(255, 255, 255, 0.05);
+  --surface-hover: rgba(255, 255, 255, 0.1);
+  --border: rgba(255, 255, 255, 0.1);
+  --border-strong: rgba(255, 255, 255, 0.2);
 
-  --text: #f5f5f7;
-  --muted: #9b9ba7;
-  --dim: #6c6c78;
+  --text: #f8f8fa;
+  --muted: #a8a8b8;
+  --dim: #76768e;
 
   --violet: #7c5cff;
-  --cyan: #22d3ee;
-  --pink: #ff4d8d;
-  --lime: #a3e635;
-  --amber: #fbbf24;
+  --cyan: #0ea5e9;
+  --pink: #ec4899;
+  --lime: #10b981;
+  --amber: #f59e0b;
 
-  --gradient: linear-gradient(120deg, var(--violet), var(--cyan) 55%, var(--pink));
-  --gradient-soft: linear-gradient(120deg, rgba(124, 92, 255, 0.22), rgba(34, 211, 238, 0.14), rgba(255, 77, 141, 0.16));
+  --gradient: linear-gradient(135deg, #7c5cff 0%, #0ea5e9 50%, #ec4899 100%);
+  --gradient-soft: linear-gradient(135deg, rgba(124, 92, 255, 0.15) 0%, rgba(14, 165, 233, 0.1) 50%, rgba(236, 72, 153, 0.12) 100%);
 
   --font-display: "Space Grotesk", "Inter", system-ui, sans-serif;
   --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
 
-  --container: 1180px;
-  --radius-sm: 10px;
-  --radius: 16px;
-  --radius-lg: 22px;
-  --radius-xl: 30px;
+  --container: 1200px;
+  --radius-sm: 8px;
+  --radius: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
 
-  --shadow: 0 24px 60px -28px rgba(0, 0, 0, 0.85);
-  --glow: 0 20px 60px -24px rgba(124, 92, 255, 0.65);
+  --shadow: 0 20px 50px -20px rgba(0, 0, 0, 0.8);
+  --glow: 0 20px 50px -20px rgba(124, 92, 255, 0.5);
 
-  --ease: cubic-bezier(0.22, 1, 0.36, 1);
-  --spring: cubic-bezier(0.34, 1.4, 0.64, 1);
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 
-  --header-h: 72px;
+  --header-h: 64px;
   /* header grows by the notch inset on notched devices */
   --header-total: calc(var(--header-h) + env(safe-area-inset-top, 0px));
 
@@ -51,7 +51,7 @@
   --safe-l: env(safe-area-inset-left, 0px);
 
   /* smallest comfortable tap target */
-  --tap: 44px;
+  --tap: 48px;
 }
 
 /* ============================================
@@ -195,34 +195,34 @@ ol {
    ============================================ */
 .display {
   font-family: var(--font-display);
-  font-weight: 600;
-  font-size: clamp(2.35rem, 6.2vw, 4.35rem);
-  line-height: 1.03;
-  letter-spacing: -0.04em;
+  font-weight: 700;
+  font-size: clamp(1.75rem, 5.5vw, 3.5rem);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
   text-wrap: balance;
 }
 
 .h2 {
   font-family: var(--font-display);
-  font-weight: 600;
-  font-size: clamp(1.85rem, 3.6vw, 2.7rem);
-  line-height: 1.1;
-  letter-spacing: -0.035em;
+  font-weight: 700;
+  font-size: clamp(1.5rem, 3.2vw, 2.2rem);
+  line-height: 1.15;
+  letter-spacing: -0.025em;
   text-wrap: balance;
 }
 
 .h3 {
   font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 1.22rem;
-  letter-spacing: -0.02em;
+  font-weight: 700;
+  font-size: clamp(1rem, 2.5vw, 1.25rem);
+  letter-spacing: -0.015em;
 }
 
 .lead {
-  font-size: 1.06rem;
+  font-size: clamp(0.95rem, 2vw, 1.05rem);
   color: var(--muted);
-  line-height: 1.75;
-  max-width: 62ch;
+  line-height: 1.7;
+  max-width: 65ch;
   text-wrap: pretty;
 }
 
@@ -266,29 +266,29 @@ ol {
   width: 100%;
   max-width: var(--container);
   margin-inline: auto;
-  padding-inline: 24px;
-  padding-left: max(24px, var(--safe-l));
-  padding-right: max(24px, var(--safe-r));
+  padding-inline: clamp(16px, 4vw, 24px);
+  padding-left: max(clamp(16px, 4vw, 24px), var(--safe-l));
+  padding-right: max(clamp(16px, 4vw, 24px), var(--safe-r));
 }
 
 .section {
-  padding-block: clamp(72px, 10vw, 132px);
+  padding-block: clamp(48px, 10vw, 96px);
   position: relative;
 }
 
 .section-head {
   display: flex;
-  align-items: flex-end;
+  align-items: flex-start;
   justify-content: space-between;
-  gap: 2rem;
+  gap: clamp(1rem, 3vw, 2rem);
   flex-wrap: wrap;
-  margin-bottom: clamp(2.25rem, 4vw, 3.5rem);
+  margin-bottom: clamp(1.5rem, 4vw, 3rem);
 }
 
 .section-head__text {
-  max-width: 62ch;
+  max-width: 70ch;
   display: grid;
-  gap: 1rem;
+  gap: clamp(0.75rem, 2vw, 1rem);
 }
 
 .grid {
@@ -309,12 +309,12 @@ ol {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  backdrop-filter: blur(16px) saturate(150%);
-  -webkit-backdrop-filter: blur(16px) saturate(150%);
+  backdrop-filter: blur(12px) saturate(130%);
+  -webkit-backdrop-filter: blur(12px) saturate(130%);
 }
 
 .glass--hover {
-  transition: transform 0.5s var(--ease), border-color 0.4s, background 0.4s, box-shadow 0.5s;
+  transition: transform 0.4s var(--ease), border-color 0.3s, background 0.3s, box-shadow 0.4s;
 }
 
 .spotlight::after {
@@ -324,18 +324,17 @@ ol {
   border-radius: inherit;
   pointer-events: none;
   opacity: 0;
-  transition: opacity 0.4s;
+  transition: opacity 0.35s;
   background: radial-gradient(
-    340px circle at var(--mx, 50%) var(--my, 0%),
-    rgba(124, 92, 255, 0.16),
-    transparent 62%
+    300px circle at var(--mx, 50%) var(--my, 0%),
+    rgba(124, 92, 255, 0.12),
+    transparent 60%
   );
 }
 
-/* hover effects only fire on real pointers, so they never stick after a tap */
 @media (hover: hover) {
   .glass--hover:hover {
-    transform: translateY(-6px);
+    transform: translateY(-4px);
     background: var(--surface-hover);
     border-color: var(--border-strong);
     box-shadow: var(--shadow);
@@ -350,13 +349,14 @@ ol {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.42rem 0.85rem;
+  padding: clamp(0.35rem, 1.5vw, 0.5rem) clamp(0.75rem, 2vw, 1rem);
   border: 1px solid var(--border);
   border-radius: 99px;
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(255, 255, 255, 0.04);
   font-family: var(--font-mono);
-  font-size: 0.74rem;
+  font-size: clamp(0.7rem, 1.8vw, 0.8rem);
   color: var(--muted);
+  white-space: nowrap;
 }
 
 .dot {
@@ -392,59 +392,61 @@ ol {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.55rem;
-  padding: 0.82rem 1.4rem;
+  gap: clamp(0.4rem, 1vw, 0.6rem);
+  padding: clamp(0.65rem, 2vw, 0.85rem) clamp(1rem, 3vw, 1.5rem);
   border-radius: 99px;
-  font-weight: 500;
-  font-size: 0.92rem;
+  font-weight: 600;
+  font-size: clamp(0.85rem, 2vw, 0.95rem);
   letter-spacing: -0.01em;
   white-space: nowrap;
   overflow: hidden;
-  transition: transform 0.35s var(--spring), box-shadow 0.35s, background 0.3s, border-color 0.3s, color 0.3s;
+  transition: transform 0.3s var(--spring), box-shadow 0.3s, background 0.25s, border-color 0.25s, color 0.25s;
+  min-height: var(--tap);
+  cursor: pointer;
 }
 
 .btn:active {
-  transform: translateY(0) scale(0.98);
+  transform: translateY(0) scale(0.96);
 }
 
 .btn--primary {
   background: var(--gradient);
-  color: #08080b;
-  font-weight: 600;
+  color: #0a0a0f;
+  font-weight: 700;
   box-shadow: var(--glow);
 }
 
 .btn--ghost {
-  border: 1px solid var(--border-strong);
+  border: 1.5px solid var(--border-strong);
   color: var(--text);
-  background: rgba(255, 255, 255, 0.02);
-  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(8px);
 }
 
 @media (hover: hover) {
   .btn--primary:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 26px 70px -22px rgba(34, 211, 238, 0.7);
+    transform: translateY(-2px);
+    box-shadow: 0 20px 60px -15px rgba(124, 92, 255, 0.6);
   }
 
   .btn--ghost:hover {
-    transform: translateY(-3px);
-    border-color: rgba(255, 255, 255, 0.3);
-    background: rgba(255, 255, 255, 0.06);
+    transform: translateY(-2px);
+    border-color: rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 0.08);
   }
 
   .btn:hover .arrow {
-    transform: translateX(4px);
+    transform: translateX(3px);
   }
 }
 
 .btn--sm {
-  padding: 0.55rem 1rem;
-  font-size: 0.84rem;
+  padding: clamp(0.5rem, 1.5vw, 0.65rem) clamp(0.85rem, 2vw, 1.1rem);
+  font-size: clamp(0.8rem, 1.8vw, 0.88rem);
 }
 
 .btn .arrow {
-  transition: transform 0.35s var(--ease);
+  transition: transform 0.3s var(--ease);
 }
 
 /* ============================================
@@ -555,20 +557,18 @@ ol {
 /* ============================================
    Mobile
    ============================================ */
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .container {
-    padding-inline: 20px;
-    padding-left: max(20px, var(--safe-l));
-    padding-right: max(20px, var(--safe-r));
+    padding-inline: clamp(14px, 3.5vw, 20px);
+    padding-left: max(clamp(14px, 3.5vw, 20px), var(--safe-l));
+    padding-right: max(clamp(14px, 3.5vw, 20px), var(--safe-r));
   }
 
   .section-head {
     align-items: flex-start;
-    gap: 1.5rem;
+    gap: 1rem;
   }
 
-  /* iOS Safari zooms the page in when a focused field is under 16px.
-     Component-scoped rules are more specific, so each input also opts in. */
   input,
   textarea,
   select {
@@ -580,21 +580,25 @@ ol {
   }
 }
 
-@media (max-width: 380px) {
+@media (max-width: 480px) {
   .container {
-    padding-inline: 16px;
-    padding-left: max(16px, var(--safe-l));
-    padding-right: max(16px, var(--safe-r));
+    padding-inline: 12px;
+    padding-left: max(12px, var(--safe-l));
+    padding-right: max(12px, var(--safe-r));
+  }
+
+  .section {
+    padding-block: clamp(32px, 8vw, 56px);
   }
 }
 
 /* touch devices get no hover transforms, so give them press feedback */
 @media (hover: none) {
   .btn:active,
-  .filters__btn:active,
+  .glass--hover:active,
   .nav__link:active,
   .sheet__link:active {
-    opacity: 0.72;
+    opacity: 0.75;
   }
 }
 

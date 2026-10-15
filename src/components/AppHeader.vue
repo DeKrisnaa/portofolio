@@ -136,23 +136,21 @@ watch(open, (value) => {
   top: 0;
   z-index: 100;
   border-bottom: 1px solid transparent;
-  transition: background 0.4s var(--ease), border-color 0.4s, backdrop-filter 0.4s;
+  transition: background 0.3s var(--ease), border-color 0.3s, backdrop-filter 0.3s;
 }
 
 .header.is-scrolled {
-  background: rgba(8, 8, 11, 0.72);
+  background: rgba(10, 10, 15, 0.8);
   border-bottom-color: var(--border);
-  backdrop-filter: blur(18px) saturate(160%);
-  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  backdrop-filter: blur(12px) saturate(120%);
+  -webkit-backdrop-filter: blur(12px) saturate(120%);
 }
 
-/* the sheet sits below the header, so the header has to go opaque too,
-   otherwise the page shows through the gap while the menu is open */
 .header.is-open {
-  background: rgba(8, 8, 11, 0.96);
+  background: rgba(10, 10, 15, 0.95);
   border-bottom-color: var(--border);
-  backdrop-filter: blur(24px) saturate(160%);
-  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  backdrop-filter: blur(20px) saturate(120%);
+  -webkit-backdrop-filter: blur(20px) saturate(120%);
 }
 
 .header__bar {
@@ -161,13 +159,13 @@ watch(open, (value) => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1.25rem;
+  gap: clamp(0.75rem, 2vw, 1.25rem);
 }
 
 .brand {
   display: inline-flex;
   align-items: center;
-  gap: 0.7rem;
+  gap: clamp(0.5rem, 1.5vw, 0.7rem);
   flex-shrink: 0;
   min-height: var(--tap);
 }
@@ -176,12 +174,12 @@ watch(open, (value) => {
   position: relative;
   display: grid;
   place-items: center;
-  width: 38px;
-  height: 38px;
+  width: clamp(32px, 8vw, 40px);
+  height: clamp(32px, 8vw, 40px);
   padding: 2px;
-  border-radius: 12px;
+  border-radius: var(--radius);
   background: var(--gradient);
-  box-shadow: 0 8px 24px -10px rgba(124, 92, 255, 0.9);
+  box-shadow: 0 8px 20px -12px rgba(124, 92, 255, 0.8);
   overflow: hidden;
 }
 
@@ -190,7 +188,7 @@ watch(open, (value) => {
   height: 100%;
   object-fit: cover;
   object-position: center 18%;
-  border-radius: 10px;
+  border-radius: calc(var(--radius) - 2px);
 }
 
 .brand__text {
@@ -200,15 +198,15 @@ watch(open, (value) => {
 
 .brand__text strong {
   font-family: var(--font-display);
-  font-size: 0.95rem;
-  font-weight: 600;
+  font-size: clamp(0.85rem, 2vw, 0.95rem);
+  font-weight: 700;
   letter-spacing: -0.02em;
 }
 
 .brand__text em {
   font-style: normal;
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: clamp(0.65rem, 1.5vw, 0.72rem);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--dim);
@@ -217,21 +215,24 @@ watch(open, (value) => {
 .nav {
   display: flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: 0.25rem;
   padding: 0.3rem;
   border: 1px solid var(--border);
   border-radius: 99px;
-  background: rgba(255, 255, 255, 0.025);
-  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(8px);
 }
 
 .nav__link {
   position: relative;
-  padding: 0.45rem 0.95rem;
+  padding: clamp(0.4rem, 1vw, 0.5rem) clamp(0.85rem, 2vw, 1rem);
   border-radius: 99px;
-  font-size: 0.86rem;
+  font-size: clamp(0.8rem, 1.8vw, 0.88rem);
   color: var(--muted);
-  transition: color 0.3s, background 0.3s;
+  transition: color 0.25s, background 0.25s;
+  min-height: var(--tap);
+  display: inline-flex;
+  align-items: center;
 }
 
 .nav__link:hover {
@@ -240,13 +241,13 @@ watch(open, (value) => {
 
 .nav__link.is-active {
   color: var(--text);
-  background: rgba(255, 255, 255, 0.07);
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .header__actions {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
+  gap: clamp(0.4rem, 1vw, 0.6rem);
 }
 
 .header__progress {
@@ -265,21 +266,27 @@ watch(open, (value) => {
   width: var(--tap);
   height: var(--tap);
   flex-shrink: 0;
-  border: 1px solid var(--border-strong);
+  border: 1.5px solid var(--border-strong);
   border-radius: 999px;
   position: relative;
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(255, 255, 255, 0.04);
+  cursor: pointer;
+  transition: background 0.25s, border-color 0.25s;
+}
+
+.burger:active {
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .burger span {
   position: absolute;
   left: 50%;
-  width: 17px;
+  width: 16px;
   height: 1.5px;
   background: var(--text);
-  border-radius: 2px;
+  border-radius: 1px;
   transform: translateX(-50%);
-  transition: transform 0.35s var(--spring), opacity 0.2s;
+  transition: transform 0.3s var(--spring), opacity 0.2s;
 }
 
 .burger span:first-child {
@@ -300,49 +307,51 @@ watch(open, (value) => {
   transform: translateX(-50%) translateY(-3.5px) rotate(-45deg);
 }
 
-/* covers the whole viewport and sits behind the header (z-index 95 < 100),
-   so there is no seam between the two and no magic offset to keep in sync */
 .sheet {
   position: fixed;
   inset: 0;
   z-index: 95;
-  padding: 2.5rem 24px;
-  padding-top: calc(var(--header-total) + 1.5rem);
-  padding-left: max(24px, var(--safe-l));
-  padding-right: max(24px, var(--safe-r));
-  padding-bottom: calc(2.5rem + var(--safe-b));
+  padding: clamp(1.5rem, 4vw, 2.5rem) clamp(14px, 4vw, 24px);
+  padding-top: calc(var(--header-total) + clamp(1rem, 3vw, 1.5rem));
+  padding-left: max(clamp(14px, 4vw, 24px), var(--safe-l));
+  padding-right: max(clamp(14px, 4vw, 24px), var(--safe-r));
+  padding-bottom: calc(clamp(1.5rem, 4vw, 2.5rem) + var(--safe-b));
   display: flex;
   flex-direction: column;
-  gap: 2rem;
-  /* scrolls on short screens instead of clipping the last link */
+  gap: clamp(1.25rem, 3vw, 2rem);
   overflow-y: auto;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
-  background: rgba(8, 8, 11, 0.96);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
+  background: rgba(10, 10, 15, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 }
 
 .sheet__nav {
   display: grid;
-  gap: 0.25rem;
+  gap: 0.15rem;
 }
 
 .sheet__link {
   display: flex;
   align-items: baseline;
-  gap: 1rem;
+  gap: clamp(0.75rem, 2vw, 1rem);
   min-height: var(--tap);
-  padding: 0.9rem 0;
+  padding: clamp(0.7rem, 2vw, 0.9rem) 0;
   border-bottom: 1px solid var(--border);
   font-family: var(--font-display);
-  font-size: clamp(1.5rem, 7.5vw, 1.75rem);
-  font-weight: 600;
-  letter-spacing: -0.03em;
+  font-size: clamp(1.25rem, 6vw, 1.6rem);
+  font-weight: 700;
+  letter-spacing: -0.025em;
   color: var(--muted);
+  transition: color 0.25s;
   opacity: 0;
-  transform: translateY(14px);
-  animation: sheet-in 0.5s var(--ease) forwards;
+  transform: translateY(12px);
+  animation: sheet-in 0.45s var(--ease) forwards;
+}
+
+.sheet__link:active {
+  color: var(--text);
 }
 
 .sheet__link.is-active {
@@ -351,26 +360,31 @@ watch(open, (value) => {
 
 .sheet__link .mono {
   color: var(--dim);
+  font-size: clamp(0.65rem, 1.5vw, 0.75rem);
 }
 
 .sheet__mail {
   font-family: var(--font-display);
-  font-size: 1.05rem;
+  font-size: clamp(0.95rem, 2vw, 1.05rem);
   color: var(--text);
   overflow-wrap: anywhere;
+  min-height: var(--tap);
+  display: flex;
+  align-items: center;
 }
 
 .sheet__socials {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: 1rem;
+  gap: clamp(0.4rem, 1.5vw, 0.6rem);
+  margin-top: clamp(0.75rem, 2vw, 1rem);
 }
 
 .sheet__foot {
   margin-top: auto;
+  padding-top: clamp(1rem, 3vw, 1.5rem);
   opacity: 0;
-  animation: sheet-in 0.5s var(--ease) 0.35s forwards;
+  animation: sheet-in 0.45s var(--ease) 0.3s forwards;
 }
 
 @keyframes sheet-in {

@@ -24,11 +24,12 @@ export const profile = {
 
 /* one long page, so navigation is a set of anchors instead of routes.
    keep this in document order, the nav highlights the first visible one */
-export const sections = ['home', 'about', 'projects', 'contact']
+export const sections = ['home', 'about', 'skills', 'projects', 'contact']
 
 export const navLinks = [
   { id: 'home', label: 'Home' },
   { id: 'about', label: 'Tentang' },
+  { id: 'skills', label: 'Skill' },
   { id: 'projects', label: 'Proyek' },
   { id: 'contact', label: 'Kontak' }
 ]

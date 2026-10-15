@@ -3,6 +3,7 @@ import Marquee from '../components/Marquee.vue'
 import StatCounter from '../components/StatCounter.vue'
 import ProjectsSection from '../components/ProjectsSection.vue'
 import AboutSection from '../components/AboutSection.vue'
+import SkillsSection from '../components/SkillsSection.vue'
 import ContactSection from '../components/ContactSection.vue'
 import { profile, marqueeItems, stats } from '../data/portfolio'
 </script>
@@ -64,6 +65,7 @@ import { profile, marqueeItems, stats } from '../data/portfolio'
     <Marquee :items="marqueeItems" />
 
     <AboutSection />
+    <SkillsSection />
     <ProjectsSection />
     <ContactSection />
   </div>
