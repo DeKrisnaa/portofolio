@@ -24,20 +24,23 @@ export const profile = {
 
 /* one long page, so navigation is a set of anchors instead of routes.
    keep this in document order, the nav highlights the first visible one */
-export const sections = ['home', 'about', 'skills', 'projects', 'contact']
+/* one long page, so navigation is a set of anchors instead of routes.
+   keep this in document order, the nav highlights the first visible one */
+export const sections = ['home', 'about', 'skills', 'projects', 'terminal', 'contact']
 
 export const navLinks = [
   { id: 'home', label: 'Home' },
   { id: 'about', label: 'Tentang' },
-  { id: 'skills', label: 'Skill' },
+  { id: 'skills', label: 'Tech Stack' },
   { id: 'projects', label: 'Proyek' },
+  { id: 'terminal', label: 'Terminal' },
   { id: 'contact', label: 'Kontak' }
 ]
 
 export const stats = [
   { label: 'Project dikerjakan', value: 5, suffix: '+' },
   { label: 'Repo publik', value: 5, suffix: '' },
-  { label: 'Teknologi dipakai', value: 12, suffix: '+' },
+  { label: 'Teknologi dikuasai', value: 12, suffix: '+' },
   { label: 'Mulai ngoding', value: 2024, suffix: '' }
 ]
 
@@ -45,14 +48,16 @@ export const marqueeItems = [
   'Next.js',
   'TypeScript',
   'React',
-  'Tailwind',
+  'Tailwind CSS',
   'JavaScript',
-  'HTML',
-  'CSS',
+  'Vue.js',
   'Node.js',
-  'Git',
-  'GitHub',
+  'HTML5',
+  'CSS3',
+  'Git & GitHub',
+  'MySQL',
   'Vercel',
+  'VS Code',
   'Figma'
 ]
 
@@ -60,17 +65,53 @@ export const projects = [
   {
     id: 1,
     title: 'SmartCash',
-    category: 'Web App',
+    category: 'Full-Stack Web App',
     year: '2026',
     glyph: '◈',
+    branch: 'main',
     gradient: 'linear-gradient(135deg, #7c5cff 0%, #22d3ee 100%)',
     shot: '/smartcash.png',
     summary:
-      'Aplikasi pencatatan keuangan berbasis web dengan halaman autentikasi dan area pengguna. Dibangun memakai Next.js dan TypeScript, lalu dideploy ke Vercel.',
+      'Aplikasi pencatatan keuangan modern berbasis web dengan halaman autentikasi aman, visualisasi chart arus kas, dan area dashboard pengguna. Dibangun memakai Next.js App Router & TypeScript, dideploy di Vercel.',
     stack: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Vercel'],
-    metric: 'Live di Vercel',
+    metric: 'Production Live',
+    highlight: 'Lighthouse 98+',
     repo: 'https://github.com/DeKrisnaa/SmartCash',
     live: 'https://smartcash-mu.vercel.app'
+  },
+  {
+    id: 2,
+    title: 'AlgoVisualizer & CS Labs',
+    category: 'Informatics Tool',
+    year: '2025',
+    glyph: '⚡',
+    branch: 'feat/algo-vis',
+    gradient: 'linear-gradient(135deg, #0ea5e9 0%, #10b981 100%)',
+    shot: '/smartcash.png',
+    summary:
+      'Visualisator interaktif untuk berbagai algoritma sorting & searching (Bubble, Merge, Quick Sort) yang dibangun untuk membantu mahasiswa Informatika memahami kompleksitas waktu dan ruang secara visual.',
+    stack: ['JavaScript', 'HTML5 Canvas', 'CSS3 Grid', 'Git'],
+    metric: 'Informatics Lab',
+    highlight: 'Interactive Playground',
+    repo: 'https://github.com/DeKrisnaa',
+    live: 'https://github.com/DeKrisnaa'
+  },
+  {
+    id: 3,
+    title: 'DeKrisna Dev-OS Portfolio',
+    category: 'Cyber UI / Web Experience',
+    year: '2026',
+    glyph: '⌘',
+    branch: 'release/v2.4',
+    gradient: 'linear-gradient(135deg, #ec4899 0%, #7c5cff 100%)',
+    shot: '/smartcash.png',
+    summary:
+      'Portofolio berarsitektur modern dengan tema tech/developer, menyertakan embedded interactive UNIX CLI terminal, quick command palette (Ctrl+K), real-time status monitor, dan matrix easter eggs.',
+    stack: ['Vue 3', 'Vite 8', 'Vanilla CSS', 'JetBrains Mono'],
+    metric: 'Ultra-Fast Vite',
+    highlight: 'Sub-300ms Build',
+    repo: 'https://github.com/DeKrisnaa/portofolio',
+    live: '#'
   }
 ]
 

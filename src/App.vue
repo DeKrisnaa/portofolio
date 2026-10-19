@@ -2,11 +2,17 @@
 import AppHeader from './components/AppHeader.vue'
 import SiteFooter from './components/SiteFooter.vue'
 import CursorGlow from './components/CursorGlow.vue'
+import CommandPalette from './components/CommandPalette.vue'
+import MatrixRain from './components/MatrixRain.vue'
+import ToastNotification from './components/ToastNotification.vue'
 </script>
 
 <template>
   <div class="app-shell">
     <CursorGlow />
+    <MatrixRain />
+    <CommandPalette />
+    <ToastNotification />
     <AppHeader />
     <main class="app-main">
       <router-view v-slot="{ Component }">

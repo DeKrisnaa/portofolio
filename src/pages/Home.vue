@@ -1,11 +1,62 @@
 <script setup>
+import { onMounted, onUnmounted, ref } from 'vue'
 import Marquee from '../components/Marquee.vue'
 import StatCounter from '../components/StatCounter.vue'
 import ProjectsSection from '../components/ProjectsSection.vue'
 import AboutSection from '../components/AboutSection.vue'
 import SkillsSection from '../components/SkillsSection.vue'
 import ContactSection from '../components/ContactSection.vue'
+import SectionHeading from '../components/SectionHeading.vue'
+import HeroDevCard from '../components/HeroDevCard.vue'
+import InteractiveTerminal from '../components/InteractiveTerminal.vue'
 import { profile, marqueeItems, stats } from '../data/portfolio'
+
+// Dynamic Typewriter Roles
+const roles = [
+  'Junior Web Developer',
+  'Informatics Student @ Primakara',
+  'Next.js & TypeScript Builder',
+  'Creative Tech Explorer'
+]
+
+const currentRoleText = ref('')
+let roleIndex = 0
+let charIndex = 0
+let isDeleting = false
+let typeTimeout = null
+
+const typeLoop = () => {
+  const currentFull = roles[roleIndex]
+
+  if (isDeleting) {
+    currentRoleText.value = currentFull.substring(0, charIndex - 1)
+    charIndex--
+  } else {
+    currentRoleText.value = currentFull.substring(0, charIndex + 1)
+    charIndex++
+  }
+
+  let delay = isDeleting ? 40 : 80
+
+  if (!isDeleting && charIndex === currentFull.length) {
+    delay = 2000 // wait before deleting
+    isDeleting = true
+  } else if (isDeleting && charIndex === 0) {
+    isDeleting = false
+    roleIndex = (roleIndex + 1) % roles.length
+    delay = 400
+  }
+
+  typeTimeout = setTimeout(typeLoop, delay)
+}
+
+onMounted(() => {
+  typeLoop()
+})
+
+onUnmounted(() => {
+  if (typeTimeout) clearTimeout(typeTimeout)
+})
 </script>
 
 <template>
@@ -13,29 +64,44 @@ import { profile, marqueeItems, stats } from '../data/portfolio'
     <!-- HERO -->
     <section id="home" class="hero container">
       <div class="hero__copy">
-        <span class="pill" v-reveal>
-          <i class="dot"></i>
-          {{ profile.status }}
-        </span>
+        <div class="hero__badges" v-reveal>
+          <span class="pill status-pill">
+            <i class="dot"></i>
+            {{ profile.status }}
+          </span>
+          <span class="pill dev-branch mono">
+            <span class="git-icon">⌥</span>
+            main
+          </span>
+          <span class="pill location-pill mono">
+            ⌖ Bali (WITA)
+          </span>
+        </div>
 
         <h1 class="display hero__title" v-reveal="80">
           Hi, I'm <span class="grad-text">{{ profile.handle }}</span>
         </h1>
 
-        <p class="hero__role" v-reveal="120">
-          Junior Developer | Content Creator
-        </p>
+        <div class="hero__role-wrapper" v-reveal="120">
+          <span class="role-prompt mono">$&nbsp;</span>
+          <span class="hero__role mono">{{ currentRoleText }}</span>
+          <span class="type-cursor"></span>
+        </div>
 
         <p class="lead hero__lead" v-reveal="160">
-          Mahasiswa Informatika di Primakara University, Bali. Saya membangun aplikasi web dari
-          desain antarmuka sampai deployment, dengan fokus pada detail yang membuat produk terasa
-          selesai.
+          Mahasiswa Informatika di Primakara University, Bali. Saya merancang dan membangun
+          aplikasi web modern dengan Next.js, TypeScript, dan Tailwind CSS — berfokus pada
+          performa tinggi, arsitektur kode yang bersih, dan antarmuka interaktif.
         </p>
 
         <div class="hero__actions" v-reveal="240">
           <a href="#projects" class="btn btn--primary">
             Lihat proyek
             <span class="arrow">→</span>
+          </a>
+          <a href="#terminal" class="btn btn--ghost">
+            <span class="btn-icon">💻</span>
+            Buka Terminal
           </a>
           <a :href="profile.cv" class="btn btn--ghost" download>
             Download CV
@@ -55,10 +121,7 @@ import { profile, marqueeItems, stats } from '../data/portfolio'
       </div>
 
       <div class="hero__visual" v-reveal="180">
-        <figure class="portrait glass" v-spotlight>
-          <img class="portrait__photo" :src="profile.photo" :alt="`Foto ${profile.name}`" />
-          <span class="portrait__glow" aria-hidden="true"></span>
-        </figure>
+        <HeroDevCard />
       </div>
     </section>
 
@@ -67,6 +130,19 @@ import { profile, marqueeItems, stats } from '../data/portfolio'
     <AboutSection />
     <SkillsSection />
     <ProjectsSection />
+
+    <!-- INTERACTIVE DEV TERMINAL SECTION -->
+    <section id="terminal" class="section container">
+      <SectionHeading
+        eyebrow="CLI Sandbox"
+        title="Interactive Developer Terminal."
+        description="Jelajahi portofolio lewat antarmuka baris perintah (CLI). Ketik 'help' atau klik chip perintah di bawah untuk mencoba neofetch, skills, projects, atau matrix."
+      />
+      <div v-reveal="90">
+        <InteractiveTerminal />
+      </div>
+    </section>
+
     <ContactSection />
   </div>
 </template>
@@ -76,13 +152,11 @@ import { profile, marqueeItems, stats } from '../data/portfolio'
 .hero {
   display: grid;
   grid-template-columns: 1.08fr 0.92fr;
-  gap: clamp(2rem, 5vw, 4.5rem);
+  gap: clamp(2rem, 5vw, 4rem);
   align-items: center;
   padding-block: clamp(3rem, 8vw, 6.5rem) clamp(3rem, 6vw, 5rem);
 }
 
-/* grid children default to min-width:auto, which lets the portrait below
-   push the whole page sideways on narrow screens */
 .hero__copy,
 .hero__visual {
   min-width: 0;
@@ -95,27 +169,78 @@ import { profile, marqueeItems, stats } from '../data/portfolio'
   gap: 1.5rem;
 }
 
+.hero__badges {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.dev-branch {
+  color: var(--cyan);
+  border-color: rgba(14, 165, 233, 0.3);
+  background: rgba(14, 165, 233, 0.08);
+  font-size: 0.72rem;
+  padding: 0.3rem 0.65rem;
+}
+
+.git-icon {
+  font-weight: bold;
+  font-size: 0.85rem;
+}
+
+.location-pill {
+  color: var(--dim);
+  font-size: 0.72rem;
+  padding: 0.3rem 0.65rem;
+}
+
 .hero__title {
   max-width: 17ch;
 }
 
-.hero__role {
+.hero__role-wrapper {
+  display: flex;
+  align-items: center;
   margin-top: -0.75rem;
-  font-family: var(--font-mono);
-  font-size: 0.82rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.role-prompt {
+  color: #00ff9d;
+  font-weight: bold;
+}
+
+.hero__role {
+  font-size: 0.84rem;
+  letter-spacing: 0.08em;
   color: var(--cyan);
 }
 
+.type-cursor {
+  display: inline-block;
+  width: 7px;
+  height: 14px;
+  background: #00f2fe;
+  margin-left: 4px;
+  animation: blink 0.9s infinite;
+}
+
 .hero__lead {
-  max-width: 50ch;
+  max-width: 52ch;
 }
 
 .hero__actions {
   display: flex;
   gap: 0.7rem;
   flex-wrap: wrap;
+}
+
+.btn-icon {
+  font-size: 0.95rem;
 }
 
 .hero__stats {
@@ -143,94 +268,6 @@ import { profile, marqueeItems, stats } from '../data/portfolio'
   font-family: var(--font-mono);
 }
 
-/* HERO PORTRAIT */
-.hero__visual {
-  position: relative;
-  display: grid;
-  place-items: center;
-}
-
-.portrait {
-  position: relative;
-  width: min(380px, 100%);
-  aspect-ratio: 4 / 5;
-  margin: 0;
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow), 0 44px 100px -55px rgba(124, 92, 255, 0.95);
-  animation: float-y 9s ease-in-out infinite;
-  /* subtle animated border */
-  background: radial-gradient(
-      130% 120% at 50% 10%,
-      rgba(255, 255, 255, 0.16),
-      transparent 60%
-    ),
-    var(--bg);
-  overflow: hidden;
-}
-
-.portrait::before {
-  content: "";
-  position: absolute;
-  inset: -1px;
-  border-radius: inherit;
-  background: conic-gradient(
-    from 180deg,
-    rgba(124, 92, 255, 0) 0deg,
-    rgba(124, 92, 255, 0.32) 55deg,
-    rgba(34, 211, 238, 0.22) 110deg,
-    rgba(163, 230, 53, 0.16) 160deg,
-    rgba(124, 92, 255, 0) 360deg
-  );
-  animation: rotate-ring 8s linear infinite;
-  filter: blur(0.4px);
-  opacity: 0.85;
-}
-
-.portrait::after {
-  content: "";
-  position: absolute;
-  inset: 2px;
-  border-radius: calc(var(--radius-xl) - 2px);
-  background: var(--bg);
-}
-
-.portrait__photo {
-  position: relative;
-  z-index: 1;
-  display: block;
-  width: calc(100% - 8px);
-  height: calc(100% - 8px);
-  margin: 4px;
-  object-fit: cover;
-  object-position: center 18%;
-  border-radius: calc(var(--radius-xl) - 8px);
-  background: rgba(8, 8, 11, 0.5);
-  transition: transform 1.1s var(--ease);
-  /* subtle parallax on hover */
-  transform-origin: center;
-  will-change: transform;
-}
-
-@media (hover: hover) {
-  .portrait:hover .portrait__photo {
-    transform: translateY(-2px) scale(1.03);
-  }
-}
-
-.portrait__glow {
-  position: absolute;
-  inset: 4px;
-  z-index: 2;
-  pointer-events: none;
-  border-radius: calc(var(--radius-xl) - 8px);
-  background: radial-gradient(
-      120% 90% at 50% 0%,
-      rgba(255, 255, 255, 0.16),
-      transparent 65%
-    ),
-    linear-gradient(180deg, transparent 55%, rgba(8, 8, 11, 0.65));
-}
-
 /* RESPONSIVE */
 @media (max-width: 980px) {
   .hero {
@@ -240,10 +277,6 @@ import { profile, marqueeItems, stats } from '../data/portfolio'
 
   .hero__title {
     max-width: 22ch;
-  }
-
-  .portrait {
-    width: min(340px, 100%);
   }
 }
 
@@ -263,7 +296,6 @@ import { profile, marqueeItems, stats } from '../data/portfolio'
 }
 
 @media (max-width: 380px) {
-  /* two stacked buttons beat two cramped ones */
   .hero__actions {
     flex-direction: column;
     align-items: stretch;

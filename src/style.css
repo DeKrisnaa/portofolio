@@ -4,25 +4,25 @@
 :root {
   color-scheme: dark;
 
-  --bg: #0a0a0f;
-  --bg-soft: #14141b;
-  --surface: rgba(255, 255, 255, 0.05);
-  --surface-hover: rgba(255, 255, 255, 0.1);
-  --border: rgba(255, 255, 255, 0.1);
-  --border-strong: rgba(255, 255, 255, 0.2);
+  --bg: #07090e;
+  --bg-soft: #0d111a;
+  --surface: rgba(14, 18, 28, 0.65);
+  --surface-hover: rgba(20, 26, 40, 0.85);
+  --border: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(0, 242, 254, 0.25);
 
   --text: #f8f8fa;
-  --muted: #a8a8b8;
-  --dim: #76768e;
+  --muted: #94a3b8;
+  --dim: #64748b;
 
-  --violet: #7c5cff;
-  --cyan: #0ea5e9;
+  --violet: #8b5cf6;
+  --cyan: #00f2fe;
   --pink: #ec4899;
-  --lime: #10b981;
-  --amber: #f59e0b;
+  --lime: #00ff9d;
+  --amber: #facc15;
 
-  --gradient: linear-gradient(135deg, #7c5cff 0%, #0ea5e9 50%, #ec4899 100%);
-  --gradient-soft: linear-gradient(135deg, rgba(124, 92, 255, 0.15) 0%, rgba(14, 165, 233, 0.1) 50%, rgba(236, 72, 153, 0.12) 100%);
+  --gradient: linear-gradient(135deg, #00f2fe 0%, #7c5cff 50%, #ec4899 100%);
+  --gradient-soft: linear-gradient(135deg, rgba(0, 242, 254, 0.15) 0%, rgba(124, 92, 255, 0.12) 50%, rgba(0, 255, 157, 0.1) 100%);
 
   --font-display: "Space Grotesk", "Inter", system-ui, sans-serif;
   --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -105,17 +105,20 @@ button,
   scroll-margin-top: var(--header-total);
 }
 
-/* ambient gradient mesh */
+/* ambient gradient mesh + cyber developer grid */
 body::before {
   content: "";
   position: fixed;
   inset: 0;
   z-index: -2;
-  background:
-    radial-gradient(1000px 620px at 12% -8%, rgba(124, 92, 255, 0.22), transparent 60%),
-    radial-gradient(820px 560px at 92% 4%, rgba(34, 211, 238, 0.16), transparent 60%),
-    radial-gradient(900px 700px at 50% 108%, rgba(255, 77, 141, 0.14), transparent 62%),
-    var(--bg);
+  background-image:
+    linear-gradient(rgba(0, 242, 254, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 242, 254, 0.035) 1px, transparent 1px),
+    radial-gradient(1000px 620px at 12% -8%, rgba(139, 92, 246, 0.22), transparent 60%),
+    radial-gradient(820px 560px at 92% 4%, rgba(0, 242, 254, 0.18), transparent 60%),
+    radial-gradient(900px 700px at 50% 108%, rgba(0, 255, 157, 0.12), transparent 62%);
+  background-size: 40px 40px, 40px 40px, auto, auto, auto;
+  background-color: var(--bg);
 }
 
 /* film grain */

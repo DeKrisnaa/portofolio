@@ -1,135 +1,359 @@
 <script setup>
+import { computed, ref } from 'vue'
 import SectionHeading from './SectionHeading.vue'
 import { skillCategories } from '../data/skills'
 import { techStack } from '../data/techStack'
 
+const activeFilter = ref('all')
+
 const iconFor = (name) => techStack.find((tech) => tech.name === name)
+
+// Flatten all skills with category info
+const allSkills = computed(() => {
+  const list = []
+  skillCategories.forEach((cat) => {
+    cat.skills.forEach((s) => {
+      const match = iconFor(s.name)
+      list.push({
+        ...s,
+        categoryId: cat.id,
+        categoryLabel: cat.label,
+        accent: cat.accent,
+        color: match?.color || '#00f2fe',
+        icon: match?.icon || ''
+      })
+    })
+  })
+  return list
+})
+
+const filteredSkills = computed(() => {
+  if (activeFilter.value === 'all') return allSkills.value
+  return allSkills.value.filter((s) => s.categoryId === activeFilter.value)
+})
+
+const roadmapItems = [
+  { name: 'Docker', role: 'Containerization & DevOps' },
+  { name: 'Go (Golang)', role: 'High-perf microservices' },
+  { name: 'Supabase', role: 'PostgreSQL Backend-as-a-Service' },
+  { name: 'Cloudflare', role: 'Edge Computing & Workers' }
+]
 </script>
 
 <template>
   <section id="skills" class="section container">
     <SectionHeading
-      eyebrow="Skill"
-      title="Bahasa pemrograman dan tools yang saya pakai."
-      description="Kumpulan teknologi yang saya gunakan untuk membangun proyek — dari bahasa pemrograman sampai tools pendukungnya."
+      eyebrow="Tech Stack & Arsenal"
+      title="Teknologi dan tools yang saya gunakan untuk rekayasa web."
+      description="Kombinasi bahasa pemrograman modern, framework reaktif, serta tools pendukung deployment dan kolaborasi tim."
     />
 
-    <div
-      v-for="(category, ci) in skillCategories"
-      :key="category.id"
-      class="cat"
-      :style="{ '--accent': category.accent }"
-      v-reveal="ci * 60"
-    >
-      <header class="cat__head">
-        <h3 class="h3 cat__title">{{ category.label }}</h3>
-        <span class="mono cat__count">{{ category.skills.length }} teknologi</span>
-      </header>
+    <!-- Filter Buttons -->
+    <div class="filter-tabs mono" v-reveal>
+      <button
+        class="filter-btn"
+        :class="{ 'is-active': activeFilter === 'all' }"
+        @click="activeFilter = 'all'"
+      >
+        <span>◈ Semua Stack ({{ allSkills.length }})</span>
+      </button>
+      <button
+        v-for="cat in skillCategories"
+        :key="cat.id"
+        class="filter-btn"
+        :class="{ 'is-active': activeFilter === cat.id }"
+        @click="activeFilter = cat.id"
+      >
+        <span>{{ cat.label }}</span>
+      </button>
+    </div>
 
-      <ul class="skills">
-        <li
-          v-for="(skill, i) in category.skills"
-          :key="skill.name"
-          class="skill glass glass--hover"
-          :title="skill.note"
-          v-spotlight
-          v-reveal="i * 60"
-        >
-          <img
-            v-if="iconFor(skill.name)"
-            class="skill__logo"
-            :src="iconFor(skill.name).icon"
-            :alt="`Logo ${skill.name}`"
-            loading="lazy"
-            decoding="async"
-          />
-          <span class="skill__name mono">{{ skill.name }}</span>
-        </li>
-      </ul>
+    <!-- Skills Grid -->
+    <div class="skills-grid" v-reveal="60">
+      <div
+        v-for="(skill, idx) in filteredSkills"
+        :key="skill.name"
+        class="skill-card glass glass--hover"
+        :style="{ '--brand-color': skill.color }"
+        v-spotlight
+      >
+        <div class="skill-card__glow" aria-hidden="true"></div>
+        <div class="skill-card__top">
+          <div class="skill-card__icon-wrap">
+            <img
+              v-if="skill.icon"
+              :src="skill.icon"
+              :alt="`Logo ${skill.name}`"
+              class="skill-card__icon"
+              loading="lazy"
+            />
+            <span v-else class="skill-card__fallback mono">{{ skill.name.slice(0, 2) }}</span>
+          </div>
+          <span class="skill-card__cat mono">{{ skill.categoryLabel.split(' ')[0] }}</span>
+        </div>
+
+        <div class="skill-card__body">
+          <h4 class="skill-card__name mono">{{ skill.name }}</h4>
+          <p class="skill-card__note">{{ skill.note }}</p>
+        </div>
+
+        <div class="skill-card__footer">
+          <div class="skill-bar">
+            <div class="skill-bar__fill"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Currently Exploring / Roadmap Card -->
+    <div class="roadmap-card glass" v-spotlight v-reveal="120">
+      <div class="roadmap-head">
+        <div class="roadmap-badge mono">
+          <span class="roadmap-dot"></span>
+          EXPLORING_ROADMAP // NEXT HORIZON
+        </div>
+        <span class="roadmap-sub mono">Teknologi yang sedang saya pelajari & eksplorasi:</span>
+      </div>
+
+      <div class="roadmap-tags">
+        <div v-for="item in roadmapItems" :key="item.name" class="roadmap-tag glass mono">
+          <span class="tag-arrow">⚡</span>
+          <strong class="tag-name">{{ item.name }}</strong>
+          <span class="tag-role">{{ item.role }}</span>
+        </div>
+      </div>
     </div>
   </section>
 </template>
 
 <style scoped>
-.cat + .cat {
-  margin-top: clamp(2rem, 4.5vw, 3rem);
+/* FILTER TABS */
+.filter-tabs {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
 }
 
-.cat__head {
+.filter-btn {
+  padding: 0.45rem 1rem;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--muted);
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: all 0.25s;
+}
+
+.filter-btn:hover {
+  background: rgba(0, 242, 254, 0.08);
+  border-color: rgba(0, 242, 254, 0.3);
+  color: #00f2fe;
+}
+
+.filter-btn.is-active {
+  background: rgba(0, 242, 254, 0.15);
+  border-color: #00f2fe;
+  color: #00f2fe;
+  box-shadow: 0 0 15px rgba(0, 242, 254, 0.2);
+}
+
+/* SKILLS GRID */
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr));
+  gap: 16px;
+}
+
+.skill-card {
+  position: relative;
   display: flex;
-  align-items: baseline;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1.25rem;
+  background: rgba(12, 16, 24, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.skill-card__glow {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 90px;
+  height: 90px;
+  background: radial-gradient(circle, var(--brand-color, #00f2fe) 0%, transparent 70%);
+  opacity: 0.05;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+
+.skill-card:hover {
+  border-color: var(--brand-color, #00f2fe);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.7), 0 0 20px color-mix(in srgb, var(--brand-color, #00f2fe) 20%, transparent);
+  transform: translateY(-4px);
+}
+
+.skill-card:hover .skill-card__glow {
+  opacity: 0.18;
+}
+
+.skill-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.85rem;
+}
+
+.skill-card__icon-wrap {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  transition: transform 0.3s;
+}
+
+.skill-card:hover .skill-card__icon-wrap {
+  transform: scale(1.08);
+  border-color: var(--brand-color, #00f2fe);
+}
+
+.skill-card__icon {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+}
+
+.skill-card__fallback {
+  color: var(--cyan);
+  font-weight: bold;
+}
+
+.skill-card__cat {
+  font-size: 0.68rem;
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--dim);
+}
+
+.skill-card__name {
+  color: #fff;
+  font-size: 0.95rem;
+  margin-bottom: 0.35rem;
+}
+
+.skill-card__note {
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+.skill-card__footer {
+  margin-top: 1.1rem;
+}
+
+.skill-bar {
+  width: 100%;
+  height: 3px;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+}
+
+.skill-bar__fill {
+  width: 85%;
+  height: 100%;
+  background: var(--brand-color, #00f2fe);
+  border-radius: 99px;
+  opacity: 0.7;
+}
+
+/* ROADMAP CARD */
+.roadmap-card {
+  margin-top: 2.5rem;
+  padding: clamp(1.5rem, 3vw, 2rem);
+  background: rgba(10, 13, 20, 0.85);
+  border: 1px solid rgba(0, 242, 254, 0.2);
+  border-radius: var(--radius-lg);
+}
+
+.roadmap-head {
+  display: flex;
+  align-items: center;
   justify-content: space-between;
   gap: 1rem;
   flex-wrap: wrap;
-  margin-bottom: 1.15rem;
+  margin-bottom: 1.25rem;
 }
 
-.cat__title {
+.roadmap-badge {
   display: inline-flex;
   align-items: center;
-  gap: 0.65rem;
+  gap: 0.5rem;
+  padding: 0.35rem 0.8rem;
+  border-radius: 6px;
+  background: rgba(0, 255, 157, 0.1);
+  border: 1px solid rgba(0, 255, 157, 0.3);
+  color: #00ff9d;
+  font-size: 0.75rem;
 }
 
-.cat__title::before {
-  content: "";
+.roadmap-dot {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: var(--accent, var(--cyan));
-  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent, var(--cyan)) 14%, transparent);
+  background: #00ff9d;
+  box-shadow: 0 0 6px #00ff9d;
+  animation: pulse-dot 1.8s infinite;
 }
 
-.cat__count {
+.roadmap-sub {
   color: var(--dim);
-  font-size: 0.72rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
+  font-size: 0.78rem;
 }
 
-/* auto-fill keeps the last row at tile size instead of stretching it */
-.skills {
+.roadmap-tags {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(118px, 100%), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
   gap: 12px;
 }
 
-.skill {
-  display: grid;
-  place-items: center;
-  gap: 0.65rem;
-  padding: 1.25rem 0.75rem 1rem;
-  text-align: center;
-  min-width: 0;
+.roadmap-tag {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 0.78rem;
 }
 
-.skill__logo {
-  width: 38px;
-  height: 38px;
-  object-fit: contain;
-  transition: transform 0.5s var(--spring);
+.tag-arrow {
+  color: #facc15;
 }
 
-@media (hover: hover) {
-  .skill:hover .skill__logo {
-    transform: scale(1.12) translateY(-2px);
-  }
+.tag-name {
+  color: #fff;
 }
 
-.skill__name {
-  color: var(--muted);
-  font-size: 0.74rem;
-  letter-spacing: 0.01em;
-  overflow-wrap: anywhere;
+.tag-role {
+  color: var(--dim);
+  font-size: 0.72rem;
+  margin-left: auto;
 }
 
 @media (max-width: 640px) {
-  .skill {
-    padding: 1rem 0.6rem 0.85rem;
-  }
-
-  .skill__logo {
-    width: 34px;
-    height: 34px;
+  .tag-role {
+    display: none;
   }
 }
 </style>

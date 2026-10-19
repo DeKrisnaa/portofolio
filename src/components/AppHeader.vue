@@ -2,6 +2,9 @@
 import { onMounted, onUnmounted, ref, watch } from 'vue'
 import { navLinks, profile, sections } from '../data/portfolio'
 import { useActiveSection } from '../composables/useActiveSection'
+import { useDevMode } from '../composables/useDevMode'
+
+const { openCommandPalette, toggleMatrix, isMatrixActive } = useDevMode()
 
 const scrolled = ref(false)
 const open = ref(false)
@@ -69,6 +72,24 @@ watch(open, (value) => {
       </nav>
 
       <div class="header__actions">
+        <button
+          class="cmd-trigger mono"
+          title="Buka Command Palette (Ctrl+K)"
+          aria-label="Buka Command Palette"
+          @click="openCommandPalette"
+        >
+          <span class="cmd-icon">⌘K</span>
+        </button>
+        <button
+          class="matrix-btn mono"
+          :class="{ 'is-active': isMatrixActive }"
+          title="Toggle Cyber Matrix Mode"
+          aria-label="Toggle Matrix Mode"
+          @click="toggleMatrix"
+        >
+          <span class="matrix-led"></span>
+          <span class="matrix-text">Matrix</span>
+        </button>
         <span class="pill status-pill">
           <i class="dot"></i>
           <span>Open to work</span>
@@ -248,6 +269,74 @@ watch(open, (value) => {
   display: flex;
   align-items: center;
   gap: clamp(0.4rem, 1vw, 0.6rem);
+}
+
+.cmd-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.35rem 0.65rem;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.2s;
+  min-height: 36px;
+}
+
+.cmd-trigger:hover {
+  background: rgba(0, 242, 254, 0.1);
+  border-color: rgba(0, 242, 254, 0.3);
+  color: #00f2fe;
+}
+
+.cmd-icon {
+  font-size: 0.76rem;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+}
+
+.matrix-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.35rem 0.65rem;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--muted);
+  font-size: 0.74rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-height: 36px;
+}
+
+.matrix-btn:hover,
+.matrix-btn.is-active {
+  background: rgba(0, 255, 157, 0.1);
+  border-color: rgba(0, 255, 157, 0.3);
+  color: #00ff9d;
+}
+
+.matrix-led {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #64748b;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+.matrix-btn:hover .matrix-led,
+.matrix-btn.is-active .matrix-led {
+  background: #00ff9d;
+  box-shadow: 0 0 6px #00ff9d;
+}
+
+@media (max-width: 640px) {
+  .matrix-text {
+    display: none;
+  }
 }
 
 .header__progress {

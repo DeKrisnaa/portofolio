@@ -2,6 +2,9 @@
 import { reactive, ref } from 'vue'
 import SectionHeading from './SectionHeading.vue'
 import { contactInfo, profile } from '../data/portfolio'
+import { useDevMode } from '../composables/useDevMode'
+
+const { copyToClipboard } = useDevMode()
 
 const form = reactive({
   name: '',
@@ -11,7 +14,6 @@ const form = reactive({
 })
 
 const state = ref('idle')
-
 const errors = ref({})
 
 const validate = () => {
@@ -37,7 +39,7 @@ const submit = async () => {
     setTimeout(() => {
       if (state.value === 'sent') state.value = 'idle'
     }, 5000)
-  } catch (error) {
+  } catch {
     state.value = 'error'
   }
 }
@@ -50,12 +52,13 @@ const reset = () => {
 <template>
   <section id="contact" class="section container">
     <SectionHeading
-      eyebrow="Kontak"
-      title="Mari bicara soal proyek atau peluang magang."
-      :description="`Saya cukup sering membuka email. Ceritakan sedikit tentang kebutuhanmu, dan saya akan balas dengan pertanyaan yang tepat. ${profile.availability}.`"
+      eyebrow="Saluran Kontak"
+      title="Mari bicara soal proyek, peluang magang, atau kolaborasi IT."
+      :description="`Terbuka untuk diskusi teknis, magang developer, atau proyek freelance. ${profile.availability}.`"
     />
 
     <div class="contact">
+      <!-- Left side: Channels & Socials -->
       <aside class="contact__side">
         <ul class="info">
           <li
@@ -66,122 +69,159 @@ const reset = () => {
             v-reveal="index * 70"
           >
             <span class="info__glyph">{{ item.glyph }}</span>
-            <div>
+            <div class="info__body">
               <span class="info__label mono">{{ item.label }}</span>
               <a
                 :href="item.href"
-                class="info__value"
+                class="info__value mono"
                 :target="item.href.startsWith('http') ? '_blank' : undefined"
                 :rel="item.href.startsWith('http') ? 'noopener' : undefined"
-                >{{ item.value }}</a
               >
+                {{ item.value }}
+              </a>
             </div>
+            <button
+              v-if="item.value.includes('@') || item.label === 'GitHub'"
+              class="copy-mini-btn mono"
+              title="Salin"
+              @click="copyToClipboard(item.value, item.label)"
+            >
+              Copy
+            </button>
           </li>
         </ul>
 
         <div class="side-card glass" v-reveal="280">
-          <span class="eyebrow">Di luar jam kuliah</span>
+          <div class="side-card__top mono">
+            <span class="side-dot"></span>
+            SYS.CREATIVE_LAB
+          </div>
           <p>
-            Saya aktif membuat konten kreatif lewat De_Krisna Channel dan senang berdiskusi soal
-            Next.js, desain antarmuka, atau cara belajar web development secara efektif.
+            Di luar koding kuliah, saya aktif mengeksplorasi audio editing & video lewat De_Krisna Channel serta riset arsitektur Next.js & Vue 3.
           </p>
           <div class="socials">
             <a
               v-for="social in profile.socials"
               :key="social.label"
               :href="social.url"
-              class="pill socials__link"
+              class="pill socials__link mono"
               :target="social.url.startsWith('http') ? '_blank' : undefined"
               :rel="social.url.startsWith('http') ? 'noopener' : undefined"
             >
-              {{ social.label }}
+              <span>{{ social.label }}</span>
               <span class="socials__handle">{{ social.handle }}</span>
             </a>
           </div>
         </div>
       </aside>
 
+      <!-- Right side: Terminal Form -->
       <div class="contact__form-wrap glass" v-spotlight v-reveal="120">
-        <transition name="swap" mode="out-in">
-          <form v-if="state !== 'sent'" class="form" @submit.prevent="submit" novalidate>
-            <div class="form__row">
-              <label class="field" :class="{ 'is-invalid': errors.name }">
-                <span class="field__label">Nama</span>
-                <input
-                  v-model="form.name"
-                  type="text"
-                  name="name"
-                  autocomplete="name"
-                  autocapitalize="words"
-                  placeholder="Nama lengkap"
-                  @input="errors.name = ''"
-                />
-                <span v-if="errors.name" class="field__error">{{ errors.name }}</span>
-              </label>
-
-              <label class="field" :class="{ 'is-invalid': errors.email }">
-                <span class="field__label">Email</span>
-                <input
-                  v-model="form.email"
-                  type="email"
-                  name="email"
-                  autocomplete="email"
-                  autocapitalize="none"
-                  autocorrect="off"
-                  spellcheck="false"
-                  placeholder="nama@email.com"
-                  @input="errors.email = ''"
-                />
-                <span v-if="errors.email" class="field__error">{{ errors.email }}</span>
-              </label>
-            </div>
-
-            <label class="field" :class="{ 'is-invalid': errors.subject }">
-              <span class="field__label">Subjek</span>
-              <input
-                v-model="form.subject"
-                type="text"
-                name="subject"
-                autocomplete="off"
-                placeholder="Contoh: Website untuk UMKM"
-                @input="errors.subject = ''"
-              />
-              <span v-if="errors.subject" class="field__error">{{ errors.subject }}</span>
-            </label>
-
-            <label class="field" :class="{ 'is-invalid': errors.message }">
-              <span class="field__label">Pesan</span>
-              <textarea
-                v-model="form.message"
-                name="message"
-                rows="6"
-                autocomplete="off"
-                placeholder="Ceritakan kebutuhan, target waktu, dan kisaran budget (jika ada)."
-                @input="errors.message = ''"
-              ></textarea>
-              <span v-if="errors.message" class="field__error">{{ errors.message }}</span>
-            </label>
-
-            <button type="submit" class="btn btn--primary form__submit" :disabled="state === 'sending'">
-              <span v-if="state === 'sending'" class="spinner"></span>
-              {{ state === 'sending' ? 'Mengirim...' : 'Kirim pesan' }}
-              <span v-if="state !== 'sending'" class="arrow">→</span>
-            </button>
-
-            <p v-if="state === 'error'" class="feedback feedback--error">
-              Terjadi kesalahan. Coba lagi atau kirim email langsung ke {{ profile.email }}.
-            </p>
-          </form>
-
-          <div v-else class="success">
-            <span class="success__glyph">✓</span>
-            <h3 class="h3">Pesan terkirim!</h3>
-            <p>
-              Terima kasih sudah menghubungi. Saya akan membalas {{ profile.availability }}.
-            </p>
-            <button class="btn btn--ghost" @click="reset">Kirim pesan lain</button>
+        <!-- Terminal Header -->
+        <div class="form-chrome mono">
+          <div class="form-dots">
+            <i></i><i></i><i></i>
           </div>
-        </transition>
+          <span class="form-chrome__title">dispatch_message.ts</span>
+          <span class="form-chrome__status">
+            <span class="status-led"></span>
+            PING: 24ms
+          </span>
+        </div>
+
+        <div class="form-inner">
+          <transition name="swap" mode="out-in">
+            <form v-if="state !== 'sent'" class="form" @submit.prevent="submit" novalidate>
+              <div class="form__row">
+                <label class="field" :class="{ 'is-invalid': errors.name }">
+                  <span class="field__label mono">
+                    <span class="prompt-sign">❯</span> nama_pengirim
+                  </span>
+                  <input
+                    v-model="form.name"
+                    type="text"
+                    name="name"
+                    autocomplete="name"
+                    autocapitalize="words"
+                    placeholder="Nama Anda atau Instansi"
+                    @input="errors.name = ''"
+                  />
+                  <span v-if="errors.name" class="field__error mono">{{ errors.name }}</span>
+                </label>
+
+                <label class="field" :class="{ 'is-invalid': errors.email }">
+                  <span class="field__label mono">
+                    <span class="prompt-sign">❯</span> email_tujuan_balik
+                  </span>
+                  <input
+                    v-model="form.email"
+                    type="email"
+                    name="email"
+                    autocomplete="email"
+                    autocapitalize="none"
+                    autocorrect="off"
+                    spellcheck="false"
+                    placeholder="nama@domain.com"
+                    @input="errors.email = ''"
+                  />
+                  <span v-if="errors.email" class="field__error mono">{{ errors.email }}</span>
+                </label>
+              </div>
+
+              <label class="field" :class="{ 'is-invalid': errors.subject }">
+                <span class="field__label mono">
+                  <span class="prompt-sign">❯</span> subjek_keperluan
+                </span>
+                <input
+                  v-model="form.subject"
+                  type="text"
+                  name="subject"
+                  autocomplete="off"
+                  placeholder="Contoh: Tawaran Magang Developer / Pembuatan Web"
+                  @input="errors.subject = ''"
+                />
+                <span v-if="errors.subject" class="field__error mono">{{ errors.subject }}</span>
+              </label>
+
+              <label class="field" :class="{ 'is-invalid': errors.message }">
+                <span class="field__label mono">
+                  <span class="prompt-sign">❯</span> rincian_pesan
+                </span>
+                <textarea
+                  v-model="form.message"
+                  name="message"
+                  rows="6"
+                  autocomplete="off"
+                  placeholder="Deskripsikan kebutuhan proyek, ruang lingkup, teknologi yang diinginkan..."
+                  @input="errors.message = ''"
+                ></textarea>
+                <span v-if="errors.message" class="field__error mono">{{ errors.message }}</span>
+              </label>
+
+              <button
+                type="submit"
+                class="btn btn--primary form__submit mono"
+                :disabled="state === 'sending'"
+              >
+                <span v-if="state === 'sending'" class="spinner"></span>
+                {{ state === 'sending' ? 'Enkripsi & Mengirim...' : 'Kirim Pesan Sekarang 🚀' }}
+              </button>
+
+              <p v-if="state === 'error'" class="feedback feedback--error mono">
+                ✕ Terjadi kesalahan. Silakan kirim email langsung ke {{ profile.email }}.
+              </p>
+            </form>
+
+            <div v-else class="success mono">
+              <span class="success__glyph">✓</span>
+              <h3 class="h3">Transmisi Terkirim!</h3>
+              <p>
+                Pesan Anda telah berhasil disampaikan. Saya akan merespons dalam {{ profile.availability }}.
+              </p>
+              <button class="btn btn--ghost btn--sm" @click="reset">Kirim pesan baru</button>
+            </div>
+          </transition>
+        </div>
       </div>
     </div>
   </section>
@@ -215,7 +255,9 @@ const reset = () => {
   align-items: center;
   gap: 1rem;
   padding: 1.1rem 1.25rem;
-  min-width: 0;
+  background: rgba(12, 16, 24, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius);
 }
 
 .info__glyph {
@@ -224,11 +266,16 @@ const reset = () => {
   width: 42px;
   height: 42px;
   flex-shrink: 0;
-  border-radius: 12px;
-  border: 1px solid var(--border);
-  background: rgba(255, 255, 255, 0.03);
-  color: var(--cyan);
+  border-radius: 10px;
+  border: 1px solid rgba(0, 242, 254, 0.25);
+  background: rgba(0, 242, 254, 0.08);
+  color: #00f2fe;
   font-size: 1.05rem;
+}
+
+.info__body {
+  flex: 1;
+  min-width: 0;
 }
 
 .info__label {
@@ -242,29 +289,62 @@ const reset = () => {
 .info__value {
   display: inline-flex;
   align-items: center;
-  min-height: var(--tap);
   color: var(--text);
-  font-size: 0.95rem;
+  font-size: 0.88rem;
   overflow-wrap: anywhere;
   transition: color 0.3s;
 }
 
-@media (hover: hover) {
-  .info__value:hover {
-    color: var(--cyan);
-  }
+.info__value:hover {
+  color: #00f2fe;
+}
+
+.copy-mini-btn {
+  padding: 0.25rem 0.6rem;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--muted);
+  font-size: 0.7rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.copy-mini-btn:hover {
+  background: rgba(0, 242, 254, 0.15);
+  border-color: #00f2fe;
+  color: #00f2fe;
 }
 
 .side-card {
   display: grid;
   gap: 0.9rem;
   padding: 1.5rem;
-  margin-top: 4px;
+  background: rgba(12, 16, 24, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius);
+}
+
+.side-card__top {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #00ff9d;
+  font-size: 0.74rem;
+  letter-spacing: 0.08em;
+}
+
+.side-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #00ff9d;
+  box-shadow: 0 0 6px #00ff9d;
 }
 
 .side-card p {
   color: var(--muted);
-  font-size: 0.92rem;
+  font-size: 0.88rem;
   line-height: 1.7;
 }
 
@@ -277,18 +357,16 @@ const reset = () => {
 .socials__link {
   justify-content: space-between;
   width: 100%;
-  min-height: var(--tap);
   padding: 0.6rem 0.9rem;
   color: var(--text);
-  transition: border-color 0.3s, background 0.3s, transform 0.3s var(--ease);
+  font-size: 0.8rem;
+  transition: all 0.2s;
 }
 
-@media (hover: hover) {
-  .socials__link:hover {
-    border-color: var(--border-strong);
-    background: rgba(255, 255, 255, 0.06);
-    transform: translateX(4px);
-  }
+.socials__link:hover {
+  border-color: #00f2fe;
+  background: rgba(0, 242, 254, 0.08);
+  color: #00f2fe;
 }
 
 .socials__handle {
@@ -298,13 +376,64 @@ const reset = () => {
 
 /* FORM */
 .contact__form-wrap {
-  padding: clamp(1.5rem, 3vw, 2.25rem);
+  background: rgba(12, 16, 24, 0.9);
+  border: 1px solid rgba(0, 242, 254, 0.25);
   border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.8);
+}
+
+.form-chrome {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1.25rem;
+  background: rgba(16, 21, 32, 0.95);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.form-dots {
+  display: flex;
+  gap: 6px;
+}
+.form-dots i {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #334155;
+}
+.form-dots i:first-child { background: #f87171; }
+.form-dots i:nth-child(2) { background: #facc15; }
+.form-dots i:last-child { background: #4ade80; }
+
+.form-chrome__title {
+  color: var(--muted);
+  font-size: 0.74rem;
+}
+
+.form-chrome__status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: #00ff9d;
+  font-size: 0.68rem;
+}
+
+.status-led {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #00ff9d;
+  box-shadow: 0 0 6px #00ff9d;
+}
+
+.form-inner {
+  padding: clamp(1.5rem, 3vw, 2rem);
 }
 
 .form {
   display: grid;
-  gap: 1.1rem;
+  gap: 1.15rem;
 }
 
 .form__row {
@@ -316,142 +445,95 @@ const reset = () => {
 .field {
   display: grid;
   gap: 0.45rem;
-  position: relative;
-  min-width: 0;
 }
 
 .field__label {
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   color: var(--muted);
-  font-family: var(--font-mono);
-  letter-spacing: 0.02em;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.prompt-sign {
+  color: #00f2fe;
 }
 
 .field input,
 .field textarea {
   width: 100%;
   padding: 0.85rem 1rem;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: rgba(8, 8, 11, 0.55);
-  color: var(--text);
-  font-size: 0.93rem;
-  resize: vertical;
-  transition: border-color 0.3s, box-shadow 0.3s, background 0.3s;
-}
-
-.field input::placeholder,
-.field textarea::placeholder {
-  color: #565663;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-sm);
+  background: rgba(6, 8, 14, 0.8);
+  color: #fff;
+  font-size: 0.9rem;
+  font-family: inherit;
+  transition: all 0.25s;
 }
 
 .field input:focus,
 .field textarea:focus {
   outline: none;
-  border-color: rgba(124, 92, 255, 0.7);
-  background: rgba(8, 8, 11, 0.8);
-  box-shadow: 0 0 0 4px rgba(124, 92, 255, 0.14);
-}
-
-.field.is-invalid input,
-.field.is-invalid textarea {
-  border-color: rgba(255, 77, 141, 0.7);
+  border-color: #00f2fe;
+  box-shadow: 0 0 15px rgba(0, 242, 254, 0.25);
+  background: rgba(10, 14, 24, 0.95);
 }
 
 .field__error {
-  font-size: 0.76rem;
-  color: var(--pink);
+  color: #f87171;
+  font-size: 0.72rem;
 }
 
 .form__submit {
   justify-self: start;
-  min-width: 180px;
-}
-
-.form__submit:disabled {
-  opacity: 0.7;
-  cursor: wait;
-}
-
-.spinner {
-  width: 15px;
-  height: 15px;
-  border: 2px solid rgba(8, 8, 11, 0.3);
-  border-top-color: #08080b;
-  border-radius: 50%;
-  animation: spin-slow 0.7s linear infinite;
-}
-
-.feedback {
-  font-size: 0.85rem;
+  font-size: 0.88rem;
 }
 
 .feedback--error {
-  color: var(--pink);
+  color: #f87171;
+  font-size: 0.8rem;
 }
 
 .success {
-  display: grid;
-  justify-items: start;
-  gap: 0.75rem;
-  padding: 1rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.85rem;
+  padding: 2.5rem 1.5rem;
 }
 
 .success__glyph {
   display: grid;
   place-items: center;
-  width: 52px;
-  height: 52px;
+  width: 54px;
+  height: 54px;
   border-radius: 50%;
-  background: rgba(163, 230, 53, 0.14);
-  color: var(--lime);
+  background: rgba(0, 255, 157, 0.15);
+  border: 1px solid #00ff9d;
+  color: #00ff9d;
   font-size: 1.5rem;
+  box-shadow: 0 0 20px rgba(0, 255, 157, 0.3);
 }
 
-.success p {
-  color: var(--muted);
-  font-size: 0.93rem;
-  max-width: 42ch;
+.spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(0, 0, 0, 0.25);
+  border-top-color: #000;
+  border-radius: 50%;
+  animation: spin-slow 0.8s linear infinite;
+  display: inline-block;
+  margin-right: 0.4rem;
 }
 
-.swap-enter-active,
-.swap-leave-active {
-  transition: opacity 0.3s ease, transform 0.3s var(--ease);
-}
-
-.swap-enter-from {
-  opacity: 0;
-  transform: translateY(12px);
-}
-
-.swap-leave-to {
-  opacity: 0;
-  transform: translateY(-8px);
-}
-
-@media (max-width: 980px) {
+@media (max-width: 760px) {
   .contact {
     grid-template-columns: 1fr;
   }
-}
-
-@media (max-width: 560px) {
   .form__row {
     grid-template-columns: 1fr;
-  }
-
-  .form__submit {
-    justify-self: stretch;
-  }
-}
-
-/* iOS Safari zooms the viewport in on focus unless the field is 16px or bigger,
-   which then leaves the page stuck at that zoom level. Touch devices always need it. */
-@media (hover: none), (max-width: 900px) {
-  .field input,
-  .field textarea {
-    font-size: 16px;
-    padding: 0.8rem 0.9rem;
   }
 }
 </style>
